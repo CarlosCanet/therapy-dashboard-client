@@ -1,16 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Playwrite+US+Modern:wght@100..400&display=swap');
+@use "./variables" as *;
+@use "bootstrap" with (
+  $primary: $primary,
+  $secondary: $secondary,
+  $danger: $danger,
+  $headings-font-family: $headings-font-family,
+  $font-family-base: $font-family-base,
+);
 
-// Variables
-$headings-font-family: "Playwrite US Modern", serif;
-$font-family-base: "overlock", sans-serif;
-
-$primary: #89BCB6;
-$secondary: #F9D559;
-$danger: #F44471;
-
-
-@import "bootstrap/scss/bootstrap";
+.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(#{red($secondary)}, #{green($secondary)}, #{blue($secondary)}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
 
 .navbar-brand {
   font-family: $headings-font-family;
 }
+
+body {
+  padding-top: 55px; // ajusta según la altura del navbar
+}
+
+.navbar .nav-link.dropdown-toggle {
+  color: $secondary !important;
+}
+
+// .navbar .dropdown-toggle::after {
+//   border-top-color: $secondary !important;
+// }
+
+.navbar .navbar-toggler {
+  border-color: $secondary;
+  color: $secondary;
+}
+
+// .navbar .navbar-toggler-icon {
+//   background-image: none; // quitar SVG default
+//   position: relative;
+//   width: 1.5rem;
+//   height: 1.5rem;
+// }
+
+// .navbar .navbar-toggler-icon::before,
+// .navbar .navbar-toggler-icon::after,
+// .navbar .navbar-toggler-icon div {
+//   background-color: $secondary;
+// }
