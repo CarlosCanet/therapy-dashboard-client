@@ -22,25 +22,13 @@ body {
 .navbar .nav-link.dropdown-toggle {
   color: $secondary !important;
 }
-
-// .navbar .dropdown-toggle::after {
-//   border-top-color: $secondary !important;
-// }
-
 .navbar .navbar-toggler {
   border-color: $secondary;
   color: $secondary;
 }
 
-// .navbar .navbar-toggler-icon {
-//   background-image: none; // quitar SVG default
-//   position: relative;
-//   width: 1.5rem;
-//   height: 1.5rem;
-// }
-
-// .navbar .navbar-toggler-icon::before,
-// .navbar .navbar-toggler-icon::after,
-// .navbar .navbar-toggler-icon div {
-//   background-color: $secondary;
-// }
+.badge-circle {
+  width:  clamp(3rem, 15vw, 20rem);
+  height: clamp(3rem, 15vw, 20rem);
+  font-size: clamp(1rem, 5vw, 4.5rem) !important;
+}

@@ -1,7 +1,11 @@
+import DashboardCard from "../components/DashboardCard"
+
+
 function DashboardPage() {
   return (
     <div>
-      <h1>More things...</h1>
+      <DashboardCard title="Patients" />
+      <DashboardCard title="Sessions" />
     </div>
   )
 }
