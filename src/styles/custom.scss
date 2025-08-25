@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Overlock:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Playwrite+US+Modern:wght@100..400&display=swap');
+
+// Variables
+$headings-font-family: "Playwrite US Modern", serif;
+$font-family-base: "overlock", sans-serif;
+
+$primary: #89BCB6;
+$secondary: #F9D559;
+$danger: #F44471;
+
+
+@import "bootstrap/scss/bootstrap";
+
+.navbar-brand {
+  font-family: $headings-font-family;
+}
