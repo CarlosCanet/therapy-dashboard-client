@@ -1,8 +1,9 @@
 import Button from "react-bootstrap/Button";
+import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
 import { Genders, type Gender, type Patient } from "../types/types";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 interface FormDataInterface {
   name: string,
@@ -75,6 +76,10 @@ function PatientInfoForm({ patient, action, onSubmit }: PatientInfoFormProps) {
             <Form.Control type="type" placeholder="" name="issues[0]" value={formData.issues[0]} onChange={handleOnChange}></Form.Control>
           </Form.Group>
       }
+      <ListGroup>
+        <Form.Label>Treatments</Form.Label>
+        {patient?.treatments.map((treatment, index) => <ListGroup.Item action as={Link} to={`/treatment-info/${treatment}`} key={index} className="mb-2">{treatment}</ListGroup.Item>)}
+      </ListGroup>
       <Form.Group>
         <Button variant="secondary" type="submit">{action === "add" ? "New patient" : "Edit patient"}</Button>
         <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
