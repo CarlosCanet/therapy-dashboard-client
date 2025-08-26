@@ -23,10 +23,14 @@ export const useFetch = <T>(url: string): APIResponse<T> => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
       const response = await axios.get<T>(url);
-      let transformedData = null;
+      let transformedData: T[] | T = response.data;
       if (response.data && Array.isArray(response.data)) {
-        transformedData = response.data.map(element => element.date ? { ...element, date: new Date(element.date) } : element);
+        transformedData = response.data.map(element => {
+          console.log("MAP:", element.date ? { ...element, date: new Date(element.date) } : element);
+          return element.date ? { ...element, date: new Date(element.date) } : element;
+        });
       }
+      console.log("useFetch:", transformedData, "url:", url, "response.data:", response.data);
       setState({
         status: response.status,
         statusText: response.statusText,

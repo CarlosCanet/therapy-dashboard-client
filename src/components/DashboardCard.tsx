@@ -16,7 +16,7 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
       <Card>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
-          <Link to={`/${title.toLowerCase()}`}>
+          <Link to={`/${title.toLowerCase()}`} className="link-danger link-underline-opacity-0">
             <div className="d-flex justify-content-center align-items-center my-3">
               {title.toLowerCase() === "sessions" ? (
                 <Badge bg="danger" className="badge-circle rounded-circle d-flex align-items-center justify-content-center border border-5 border-primary text-primary ">{elements?.length}</Badge>
