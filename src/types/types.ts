@@ -3,7 +3,7 @@ export type Gender = "Male" | "Female" | "Non-binary" | "Gender neutral" | "Agen
 export interface Patient {
   id: string,
   name: string,
-  aAge: number,
+  age: number,
   gender: Gender,
   issues: string [],
   treatments: string [],

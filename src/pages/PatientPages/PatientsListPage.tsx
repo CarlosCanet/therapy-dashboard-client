@@ -1,7 +1,8 @@
-import { ListGroup } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import type { Patient } from "../../types/types";
+import { Link } from "react-router";
 
 interface PatientsListProps {
   patients: Patient[];
@@ -18,7 +19,7 @@ function PatientsListPage({patients}: PatientsListProps) {
         <Form.Control type="text" placeholder="Search patient" onChange={handleOnChange}/>
       </FloatingLabel>
       <ListGroup>
-        {patients.map(patient => <ListGroup.Item>{patient.name}</ListGroup.Item>)}        
+        {patients.map(patient => <ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} >{patient.name}</ListGroup.Item>)}        
       </ListGroup>
     </div>
   );

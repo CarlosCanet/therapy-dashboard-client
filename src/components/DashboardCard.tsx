@@ -26,7 +26,7 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
             </div>
           </Link>
           <ListGroup>
-            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} href="/">{"date" in element ? element.date.toLocaleDateString() : element.name}</ListGroup.Item>)}
+            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} as={Link} to="/">{"date" in element ? element.date.toLocaleDateString() : element.name}</ListGroup.Item>)}
             
           </ListGroup>
         </Card.Body>
