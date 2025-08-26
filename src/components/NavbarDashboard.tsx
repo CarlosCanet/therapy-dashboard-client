@@ -15,10 +15,10 @@ function NavbarDashboard() {
           <Nav className="me-auto">
             <Nav.Link href="/" className='text-secondary'>Home</Nav.Link>
             <NavDropdown title="Patients" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/" className='text-secondary'>Patient list</NavDropdown.Item>
-              <NavDropdown.Item href="/" className='text-secondary'>Add new patient</NavDropdown.Item>
+              <NavDropdown.Item href="/patients" className='text-secondary'>Patient list</NavDropdown.Item>
+              <NavDropdown.Item href="/new-patient" className='text-secondary'>Add new patient</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/" className='text-secondary'>Calendar</Nav.Link>
+            <Nav.Link href="/calendar" className='text-secondary'>Calendar</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

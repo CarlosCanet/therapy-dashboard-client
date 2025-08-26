@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import type { Patient, Session } from "../types/types";
 import Loading from "./Loading";
+import { Link } from "react-router";
 
 interface DashboardCardProps {
   title: "Sessions" | "Patients";
@@ -15,13 +16,15 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
       <Card>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
-          <div className="d-flex justify-content-center align-items-center my-3">
-            {title.toLowerCase() === "sessions" ? (
-              <Badge bg="danger" className="badge-circle rounded-circle d-flex align-items-center justify-content-center border border-5 border-primary text-primary ">{elements?.length}</Badge>
-            ) : (
-              <Badge bg="primary" className="badge-circle rounded-circle d-flex align-items-center justify-content-center fs-1 border border-5 border-danger text-danger">{elements?.length}</Badge>
-            )}
-          </div>
+          <Link to={`/${title.toLowerCase()}`}>
+            <div className="d-flex justify-content-center align-items-center my-3">
+              {title.toLowerCase() === "sessions" ? (
+                <Badge bg="danger" className="badge-circle rounded-circle d-flex align-items-center justify-content-center border border-5 border-primary text-primary ">{elements?.length}</Badge>
+              ) : (
+                <Badge bg="primary" className="badge-circle rounded-circle d-flex align-items-center justify-content-center fs-1 border border-5 border-danger text-danger">{elements?.length}</Badge>
+              )}
+            </div>
+          </Link>
           <ListGroup>
             {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} href="/">{"date" in element ? element.date.toLocaleDateString() : element.name}</ListGroup.Item>)}
             

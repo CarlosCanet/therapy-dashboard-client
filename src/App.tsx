@@ -6,6 +6,15 @@ import { useEffect, useState } from "react";
 import type { Patient, Session } from "./types/types";
 import { useFetch, type APIResponse } from "./hooks/useFetch";
 import Loading from "./components/Loading";
+import PatientsListPage from "./pages/PatientPages/PatientsListPage";
+import PatientInfoPage from "./pages/PatientPages/PatientInfoPage";
+import NewPatientPage from "./pages/PatientPages/NewPatientPage";
+import SessionsListPage from "./pages/SessionPages/SessionsListPage";
+import SessionInfoPage from "./pages/SessionPages/SessionInfoPage";
+import NewSessionPage from "./pages/SessionPages/NewSessionPage";
+import SessionsListTreePage from "./pages/SessionPages/SessionsListTreePage";
+import TreatmentInfoPage from "./pages/TreatmentPages/TreatmentInfoPage";
+import NewTreatmentPage from "./pages/TreatmentPages/NewTreatmentPage";
 
 function App() {
   const [patients, setPatients] = useState<Patient[] | null>(null);
@@ -28,6 +37,18 @@ function App() {
       <Routes>
         <Route path="/" element={patientsApiResponse.loading || sessionsApiResponse.loading ? <Loading /> : <DashboardPage patients={patients} sessions={sessions} />}></Route>
         
+        <Route path="/patients" element={patientsApiResponse.loading ? <Loading /> : <PatientsListPage patients={patientsApiResponse.data ?? []} />}></Route>
+        <Route path="/patients/:patientId" element={<PatientInfoPage />}></Route>
+        <Route path="/new-patient" element={<NewPatientPage />}></Route>
+        
+        <Route path="/sessions" element={<SessionsListPage />}></Route>
+        <Route path="/sessions/:sessionId" element={<SessionInfoPage />}></Route>
+        <Route path="/new-session" element={<NewSessionPage />}></Route>
+        <Route path="/sessions/tree" element={<SessionsListTreePage />}></Route>
+        
+        <Route path="/treatment-info/:treatmentId" element={<TreatmentInfoPage />}></Route>
+        <Route path="/new-treatment" element={<NewTreatmentPage />}></Route>
+       
         
         <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
