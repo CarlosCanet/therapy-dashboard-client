@@ -26,7 +26,6 @@ export const useFetch = <T>(url: string): APIResponse<T> => {
       let transformedData: T[] | T = response.data;
       if (response.data && Array.isArray(response.data)) {
         transformedData = response.data.map(element => {
-          console.log("MAP:", element.date ? { ...element, date: new Date(element.date) } : element);
           return element.date ? { ...element, date: new Date(element.date) } : element;
         });
       }

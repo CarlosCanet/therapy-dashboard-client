@@ -25,12 +25,12 @@ function App() {
     if (!patientsApiResponse.loading && patientsApiResponse.data) {
       setPatients(patientsApiResponse.data);
     }
-  }, [patientsApiResponse.data, patientsApiResponse.loading]);
+  }, [patientsApiResponse]);
   useEffect(() => {
     if (!sessionsApiResponse.loading && sessionsApiResponse.data) {
       setSessions(sessionsApiResponse.data);
     }
-  }, [sessionsApiResponse.data, sessionsApiResponse.loading]);
+  }, [sessionsApiResponse]);
   return (
     <>
       <NavbarDashboard />

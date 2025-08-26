@@ -1,4 +1,15 @@
-export type Gender = "Male" | "Female" | "Non-binary" | "Gender neutral" | "Agender" | "Pangender" | "Genderqueer" | "None";
+export const Genders = {
+  Male: "Male",
+  Female: "Female",
+  NonBinary: "Non-binary",
+  GenderNeutral: "Gender neutral",
+  Agender: "Agender",
+  Pangender: "Pangender",
+  Genderqueer: "Genderqueer",
+  None: "None"
+} as const;
+
+export type Gender = typeof Genders[keyof typeof Genders];
 
 export interface Patient {
   id: string,

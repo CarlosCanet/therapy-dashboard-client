@@ -1,6 +1,8 @@
+import PatientInfoForm from "../../components/PatientInfoForm"
+
 function NewPatientPage() {
   return (
-    <div>NewPatientPage</div>
+    <PatientInfoForm action="add"/>
   )
 }
 export default NewPatientPage
