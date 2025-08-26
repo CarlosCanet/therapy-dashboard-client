@@ -14,12 +14,12 @@ interface FormDataInterface {
 }
 
 interface PatientInfoFormProps {
+  action: string,
+  onSubmit: (patient: Patient) => void
   patient?: Patient,
-  action?: string,
-  onSubmit?: (patient: Patient) => void
 }
 
-function PatientInfoForm({ patient, action, onSubmit }: PatientInfoFormProps) {
+function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
   const [formData, setFormData] = useState<FormDataInterface>({ name: patient?.name ?? "", age: patient?.age ?? 0, gender: patient?.gender ?? Genders.None, issues: patient?.issues ?? [] });
   const navigate = useNavigate();
 
@@ -37,10 +37,22 @@ function PatientInfoForm({ patient, action, onSubmit }: PatientInfoFormProps) {
   
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Submiteado")
-    if (patient && onSubmit) {
+    if (action === "add") {
+      const newPatient: Patient = {
+        name: formData.name,
+        age: formData.age,
+        gender: formData.gender,
+        issues: formData.issues,
+        activitiesPending: [],
+        activitiesDone: [],
+        treatments: []
+      };
+      onSubmit(newPatient);
+      console.log("Submiteado add")
+    } else if (action === "edit" && patient) {
       const submittedPatient = {...formData, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: patient.treatments ?? [] };
-      onSubmit(submittedPatient as Patient);
+      onSubmit(submittedPatient);
+      console.log("Submiteado edit")
     }
   }
   

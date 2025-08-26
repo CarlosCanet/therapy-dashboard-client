@@ -37,7 +37,7 @@ function App() {
       <Routes>
         <Route path="/" element={patientsApiResponse.loading || sessionsApiResponse.loading ? <Loading /> : <DashboardPage patients={patients} sessions={sessions} />}></Route>
         
-        <Route path="/patients" element={patientsApiResponse.loading ? <Loading /> : <PatientsListPage patients={patientsApiResponse.data ?? []} />}></Route>
+        <Route path="/patients" element={patientsApiResponse.loading ? <Loading /> : <PatientsListPage patients={patientsApiResponse.data ?? []} setPatients={setPatients} />}></Route>
         <Route path="/patients/:patientId" element={<PatientInfoPage />}></Route>
         <Route path="/new-patient" element={<NewPatientPage />}></Route>
         
