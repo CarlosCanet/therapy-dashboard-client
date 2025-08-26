@@ -1,4 +1,4 @@
-import axios, { type AxiosResponse } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 export type APIResponse<T> = {
@@ -9,8 +9,24 @@ export type APIResponse<T> = {
   loading: boolean;
 };
 
+// async function doRequest<T>(method: string, url: string, body?: unknown): Promise<AxiosResponse<T>> {
+//   switch (method.toLowerCase()) {
+//     case "get":
+//       return axios.get<T>(url);
+//     case "post":
+//       return axios.post<T>(url, body);
+//     case "put":
+//       return axios.put<T>(url, body);
+//     case "patch":
+//       return axios.patch<T>(url, body);
+//     case "delete":
+//       return axios.delete<T>(url);
+//     default:
+//       throw new Error(`Unsupported method: ${method}`);
+//   }
+// }
 
-export const useFetch = <T>(method: string, url: string, body?: unknown): APIResponse<T> => {
+export const useFetch = <T>(method: string, url: string, data?: unknown): APIResponse<T> => {
   const [state, setState] = useState<APIResponse<T>>({
     status: 0,
     statusText: "",
@@ -19,21 +35,15 @@ export const useFetch = <T>(method: string, url: string, body?: unknown): APIRes
     loading: true,
   });
 
-  const APIMethods: Record<string, () => Promise<AxiosResponse<T>>> = {
-    get: () => axios.get<T>(url),
-    post: () => axios.post<T>(url, body),
-    put: () => axios.put<T>(url, body),
-    patch: () => axios.patch<T>(url, body),
-    delete: () => axios.delete<T>(url)
-  }  
-
   const getData = async () => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
       // const response = await axios.get<T>(url);
-      console.log(APIMethods[method])
-      const response = await APIMethods[method.toLowerCase()]();
-      let transformedData: T[] | T = response.data;
+      // const response = await axios(method, url, data);
+      const response = await axios({method, url, data});
+
+      // 
+      let transformedData: T[] | T = response.data as T | T[];
       if (method.toLowerCase() === "get") {
         if (response.data && Array.isArray(response.data)) {
           transformedData = response.data.map(element => {
@@ -41,7 +51,8 @@ export const useFetch = <T>(method: string, url: string, body?: unknown): APIRes
           });
         }
       }
-      console.log("useFetch:", transformedData, "url:", url, "response.data:", response.data);
+      // console.log("useFetch:", transformedData, "url:", url, "response.data:", response.data);
+
       setState({
         status: response.status,
         statusText: response.statusText,

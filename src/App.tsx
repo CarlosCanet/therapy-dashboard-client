@@ -19,8 +19,8 @@ import NewTreatmentPage from "./pages/TreatmentPages/NewTreatmentPage";
 function App() {
   const [patients, setPatients] = useState<Patient[] | null>(null);
   const [sessions, setSessions] = useState<Session[] | null>(null);
-  const patientsApiResponse: APIResponse<Patient[]> = useFetch<Patient[]>(`${import.meta.env.VITE_API_URL}/patients`);
-  const sessionsApiResponse: APIResponse<Session[]> = useFetch<Session[]>(`${import.meta.env.VITE_API_URL}/sessions`);
+  const patientsApiResponse: APIResponse<Patient[]> = useFetch<Patient[]>("get", `${import.meta.env.VITE_API_URL}/patients`);
+  const sessionsApiResponse: APIResponse<Session[]> = useFetch<Session[]>("get", `${import.meta.env.VITE_API_URL}/sessions`);
   useEffect(() => {
     if (!patientsApiResponse.loading && patientsApiResponse.data) {
       setPatients(patientsApiResponse.data);

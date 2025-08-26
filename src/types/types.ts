@@ -12,7 +12,7 @@ export const Genders = {
 export type Gender = typeof Genders[keyof typeof Genders];
 
 export interface Patient {
-  id: string,
+  id?: string,
   name: string,
   age: number,
   gender: Gender,
@@ -35,7 +35,7 @@ export interface TreatmentInfo {
 }
 
 export interface Session {
-  id: string,
+  id?: string,
   patientId: string,
   date: Date,
   description: string,

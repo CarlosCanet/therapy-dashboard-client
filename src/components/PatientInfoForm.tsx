@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Genders, type Gender, type Patient } from "../types/types";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 interface FormDataInterface {
   name: string,
@@ -14,11 +15,12 @@ interface FormDataInterface {
 interface PatientInfoFormProps {
   patient?: Patient,
   action?: string,
-  onSubmit?: (event: string) => void
+  onSubmit?: (patient: Patient) => void
 }
 
-function PatientInfoForm({ patient, action }: PatientInfoFormProps) {
+function PatientInfoForm({ patient, action, onSubmit }: PatientInfoFormProps) {
   const [formData, setFormData] = useState<FormDataInterface>({ name: patient?.name ?? "", age: patient?.age ?? 0, gender: patient?.gender ?? Genders.None, issues: patient?.issues ?? [] });
+  const navigate = useNavigate();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setFormData(prevState => {
     console.log({ ...prevState, [event.target.name]: event.target.value });
@@ -35,6 +37,10 @@ function PatientInfoForm({ patient, action }: PatientInfoFormProps) {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Submiteado")
+    if (patient && onSubmit) {
+      const submittedPatient = {...formData, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: patient.treatments ?? [] };
+      onSubmit(submittedPatient as Patient);
+    }
   }
   
   return (
@@ -69,7 +75,10 @@ function PatientInfoForm({ patient, action }: PatientInfoFormProps) {
             <Form.Control type="type" placeholder="" name="issues[0]" value={formData.issues[0]} onChange={handleOnChange}></Form.Control>
           </Form.Group>
       }
-      <Button variant="secondary" type="submit">Submit</Button>
+      <Form.Group>
+        <Button variant="secondary" type="submit">{action === "add" ? "New patient" : "Edit patient"}</Button>
+        <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
+      </Form.Group>
     </Form>
   )
 }
