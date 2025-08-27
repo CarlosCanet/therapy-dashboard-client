@@ -14,7 +14,7 @@ interface FormDataInterface {
 }
 
 interface PatientInfoFormProps {
-  action: string,
+  action: "add" | "edit",
   onSubmit: (patient: Patient) => void
   patient?: Patient,
 }

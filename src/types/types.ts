@@ -40,7 +40,8 @@ export interface Session {
   date: Date,
   description: string,
   problems: string,
-  activitiesReviewed: Activity,
-  activitiesProposed: Activity,
-  treatmentInfo: TreatmentInfo 
+  // activitiesReviewed: Activity[],
+  // activitiesProposed: Activity[],
+  // treatmentInfo: TreatmentInfo,
+  patient?: Patient
 }

@@ -16,7 +16,7 @@ function patientHasId(patient: Patient): patient is Patient & { id: string }{
   return patient.id !== undefined && patient.id !== null;
 }
 
-function PatientsListPage({ patients, setPatients }: PatientsListProps) {
+function PatientsListPage({ patients }: PatientsListProps) {
 const handleOnChange = () => {
     console.log("CHANGE!");
   };
@@ -27,8 +27,8 @@ const handleOnChange = () => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
       console.log(response);
-      const index = patients.findIndex((patient) => patient.id === patientId);
-      setPatients(patients.toSpliced(index, 1));
+      // const index = patients.findIndex((patient) => patient.id === patientId);
+      // setPatients(patients.toSpliced(index, 1));
     } catch (error) {
       console.log(error); //! Show something
     }

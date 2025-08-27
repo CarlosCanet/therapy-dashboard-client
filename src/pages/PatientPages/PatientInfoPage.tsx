@@ -13,7 +13,7 @@ function PatientInfoPage() {
   const { patientId } = useParams();
   const patientApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients/${patientId}`);
   useEffect(() => {
-     if (!patientApiResponse.loading && patientApiResponse.data) {
+     if (!patientApiResponse.loading && patientApiResponse.data && !Array.isArray(patientApiResponse.data)) {
       setPatient(patientApiResponse.data);
     }
   }, [patientApiResponse]);
