@@ -19,7 +19,8 @@ export interface Patient {
   issues: string [],
   treatments: string [],
   activitiesPending: Activity[],
-  activitiesDone: Activity[]
+  activitiesDone: Activity[],
+  sessions?: Session[]
 }
 
 export interface Activity {

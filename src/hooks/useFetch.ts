@@ -9,24 +9,6 @@ export type APIResponse<T> = {
   loading: boolean;
 };
 
-
-// async function doRequest<T>(method: string, url: string, body?: unknown): Promise<AxiosResponse<T>> {
-//   switch (method.toLowerCase()) {
-//     case "get":
-//       return axios.get<T>(url);
-//     case "post":
-//       return axios.post<T>(url, body);
-//     case "put":
-//       return axios.put<T>(url, body);
-//     case "patch":
-//       return axios.patch<T>(url, body);
-//     case "delete":
-//       return axios.delete<T>(url);
-//     default:
-//       throw new Error(`Unsupported method: ${method}`);
-//   }
-// }
-
 export const useFetch = <T>(method: string, url: string, transformationFn: ((data: T | T[]) => T | T[]) | null = null , data?: unknown): APIResponse<T> => {
   const [state, setState] = useState<APIResponse<T>>({
     status: 0,
@@ -39,22 +21,8 @@ export const useFetch = <T>(method: string, url: string, transformationFn: ((dat
   const getData = async () => {
     setState((prevState) => ({ ...prevState, loading: true }));
     try {
-      // const response = await axios.get<T>(url);
-      // const response = await axios(method, url, data);
       const response = await axios({ method, url, data });
-      
       const transformedData = transformationFn ? transformationFn(response.data) : response.data;
-
-      // let transformedData: T[] | T = response.data as T | T[];
-      // if (transformationFn) {
-      //   // if (response.data && Array.isArray(response.data)) {
-      //   //   transformedData = response.data.map(element => {
-      //   //     return element.date ? { ...element, date: new Date(element.date) } : element;
-      //   //   });
-      //   // }
-      //   transformedData = transformationFn(response.data);
-      // }
-      // console.log("useFetch:", transformedData, "url:", url, "response.data:", response.data);
 
       setState({
         status: response.status,

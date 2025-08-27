@@ -6,13 +6,13 @@ import Loading from "../../components/Loading";
 import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
 import { dateToString } from "../../utils/dateUtils";
-import { transformDataFetchWithDates } from "../../utils/apiUtils";
+import { transformDataFetchWithDate } from "../../utils/apiUtils";
 import axios from "axios";
 
 function SessionInfoPage() {
   const [session, setSession] = useState<Session | null>(null);
   const { sessionId } = useParams();
-  const sessionApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformDataFetchWithDates);
+  const sessionApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformDataFetchWithDate);
   useEffect(() => {
      if (!sessionApiResponse.loading && sessionApiResponse.data && !Array.isArray(sessionApiResponse.data)) {
        setSession(sessionApiResponse.data);
