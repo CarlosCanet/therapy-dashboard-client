@@ -37,7 +37,8 @@ function PatientInfoPage() {
   return (
     <div>
       <h1>{patient.name}</h1>
-      <PatientInfoForm patient={patient} action="edit" onSubmit={onEdit}/>
+      <PatientInfoForm patient={patient} action="edit" onSubmit={onEdit} />
+      <h2 className="my-4">Sessions</h2>
     </div>
   )
 }

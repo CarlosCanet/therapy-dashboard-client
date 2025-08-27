@@ -8,17 +8,22 @@ import type { Session } from "../../types/types";
 import { Link } from "react-router";
 import { Trash } from "react-bootstrap-icons";
 import axios from "axios";
-
-
-interface SessionListPageProps {
-  sessions: Session[] | null,
-}
+import { useEffect, useState } from "react";
+import { useFetch, type APIResponse } from "../../hooks/useFetch";
+import { transformDataFetchWithDates } from "../../utils/apiUtils";
 
 function sessionHasId(session: Session): session is Session & { id: string }{
   return session.id !== undefined && session.id !== null;
 }
 
-function SessionListPage({sessions}: SessionListPageProps) {
+function SessionListPage() {
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const sessionsApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient`, transformDataFetchWithDates);
+  useEffect(() => {
+    if (!sessionsApiResponse.loading && sessionsApiResponse.data && Array.isArray(sessionsApiResponse.data)) {
+      setSessions(sessionsApiResponse.data);
+    }
+  }, [sessionsApiResponse]);
 
   const handleOnChange = () => {
 

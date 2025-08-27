@@ -6,18 +6,24 @@ import type { Patient } from "../../types/types";
 import { Link } from "react-router";
 import { Trash } from "react-bootstrap-icons";
 import axios from "axios";
-
-interface PatientsListProps {
-  patients: Patient[];
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
-}
+import { useEffect, useState } from "react";
+import { useFetch, type APIResponse } from "../../hooks/useFetch";
+import Loading from "../../components/Loading";
 
 function patientHasId(patient: Patient): patient is Patient & { id: string }{
   return patient.id !== undefined && patient.id !== null;
 }
 
-function PatientsListPage({ patients }: PatientsListProps) {
-const handleOnChange = () => {
+function PatientsListPage() {
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
+  useEffect(() => {
+    if (!patientsApiResponse.loading && patientsApiResponse.data && Array.isArray(patientsApiResponse.data)) {
+      setPatients(patientsApiResponse.data);
+    }
+  }, [patientsApiResponse]);
+  
+  const handleOnChange = () => {
     console.log("CHANGE!");
   };
 
@@ -36,20 +42,25 @@ const handleOnChange = () => {
   
   return (
     <div>
-      <h1>Patient List</h1>
-      <FloatingLabel label="Patient name" className="my-3" controlId="patientNameFilter">
-        <Form.Control type="text" placeholder="Search patient" onChange={handleOnChange} />
-      </FloatingLabel>
-      <ListGroup>
-        {patients
-          .filter(patientHasId)
-          .map((patient) => (
-          (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center">
-            {patient.name}
-            <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, patient.id)}><Trash color="white" /></Button>
-          </ListGroup.Item>)
-        ))}
-      </ListGroup>
+      {
+        patientsApiResponse.loading ? <Loading /> :
+          <>
+            <h1>Patient List</h1>
+            <FloatingLabel label="Patient name" className="my-3" controlId="patientNameFilter">
+              <Form.Control type="text" placeholder="Search patient" onChange={handleOnChange} />
+            </FloatingLabel>
+            <ListGroup>
+              {patients
+                .filter(patientHasId)
+                .map((patient) => (
+                  (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center">
+                  {patient.name}
+                  <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, patient.id)}><Trash color="white" /></Button>
+                </ListGroup.Item>)
+              ))}
+            </ListGroup>
+          </>
+      }
     </div>
   );
 }
