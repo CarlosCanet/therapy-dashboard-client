@@ -74,7 +74,7 @@ function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
           {Object.values(Genders).map(gender => <option key={gender} value={gender}>{gender}</option>)}
         </Form.Select>
       </Form.Group>
-      {patient?.issues.map((issue, index) => {
+      {patient?.issues.map((_issue, index) => {
         return (
           <Form.Group className="my-3" controlId="" key={`issue${index}`}>
             <Form.Label>Issues</Form.Label>
