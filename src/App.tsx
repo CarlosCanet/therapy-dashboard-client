@@ -27,7 +27,7 @@ function App() {
         
         <Route path="/sessions" element={<SessionListPage />}></Route>
         <Route path="/sessions/:sessionId" element={<SessionInfoPage />}></Route>
-        <Route path="/new-session" element={<NewSessionPage />}></Route>
+        <Route path="/patients/:patientId/new-session" element={<NewSessionPage />}></Route>
         <Route path="/sessions/tree" element={<SessionListTreePage />}></Route>
         
         <Route path="/treatment-info/:treatmentId" element={<TreatmentInfoPage />}></Route>

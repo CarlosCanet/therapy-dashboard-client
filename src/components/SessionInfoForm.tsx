@@ -20,9 +20,10 @@ interface SessionInfoFormProps {
   action: "add" | "edit",
   onSubmit: (session: Session) => void
   session?: Session,
+  patientId?: string
 }
 
-function SessionInfoForm({ action, onSubmit, session }: SessionInfoFormProps) {
+function SessionInfoForm({ action, onSubmit, session, patientId }: SessionInfoFormProps) {
   const [formData, setFormData] = useState<FormDataInterface>({ date: dateToString(session?.date), description: session?.description ?? "", problems: session?.problems ?? "" });
   const navigate = useNavigate();
   useEffect(() => {
@@ -37,13 +38,12 @@ function SessionInfoForm({ action, onSubmit, session }: SessionInfoFormProps) {
   
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (action === "add") {
+    if (action === "add" && patientId) {
       const newSession: Session = {
-        patientId: session?.patientId ?? "",    //!!! GESTIONAR PATIENT_ID
+        patientId: patientId,
         description: formData.description,
         date: new Date(formData.date),
         problems: formData.problems
-        
       };
       onSubmit(newSession);
       console.log("Submiteado add")

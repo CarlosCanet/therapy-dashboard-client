@@ -43,7 +43,7 @@ function PatientInfoPage() {
       <PatientInfoForm patient={patient} action="edit" onSubmit={onEdit} />
       <h2 className="my-4">Sessions</h2>
       
-      <Link to={"/new-session"}>
+      <Link to={`/patients/${patient.id}/new-session`}>
         <Badge className="my-1">Add new Session</Badge>
       </Link>
       <SessionList sessions={patient.sessions ?? []}/>
