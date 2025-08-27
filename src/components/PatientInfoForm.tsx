@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router";
 interface FormDataInterface {
   name: string,
   age: number,
-  gender: Gender,  
+  gender: Gender,
   issues: string[]
   [key: string]: string | number | string [] | Gender;
 }
@@ -90,7 +90,7 @@ function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
       }
       <ListGroup>
         <Form.Label>Treatments</Form.Label>
-        {patient?.treatments.map((treatment, index) => <ListGroup.Item action as={Link} to={`/treatment-info/${treatment}`} key={index} className="mb-2">{treatment}</ListGroup.Item>)}
+        {patient?.treatments.map((treatment, index) => <ListGroup.Item action as={Link} to={`/treatment-info/${treatment.id}`} key={index} className="mb-2">{treatment.name}</ListGroup.Item>)}
       </ListGroup>
       <Form.Group>
         <Button variant="secondary" type="submit">{action === "add" ? "New patient" : "Edit patient"}</Button>

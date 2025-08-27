@@ -11,13 +11,18 @@ export const Genders = {
 
 export type Gender = typeof Genders[keyof typeof Genders];
 
+export interface PatientTreatment {
+  id: string,
+  name: string,
+}
+
 export interface Patient {
   id?: string,
   name: string,
   age: number,
   gender: Gender,
   issues: string [],
-  treatments: string [],
+  treatments: PatientTreatment [],
   activitiesPending: Activity[],
   activitiesDone: Activity[],
   sessions?: Session[]
@@ -30,9 +35,19 @@ export interface Activity {
 }
 
 export interface TreatmentInfo {
-  treatment: string,
-  date: Date,
-  info: string
+  id: string;
+  name: string;
+  labName: string;
+  activePrinciples: string;
+  needPrescription: boolean;
+  isGeneric: boolean;
+  treatmentImageURL: string;
+  boxImageURL: string;
+  technichalDocURL: string;
+  leafletURL: string;
+  administration: string;
+  pharmaForm: string,
+  dosage: string
 }
 
 export interface Session {
