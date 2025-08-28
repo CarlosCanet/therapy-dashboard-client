@@ -1,24 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import type { TreatmentInfo } from "../../types/types";
+import { useNavigate, useParams } from "react-router";
+import type { RemoteAPITreatment, TreatmentInfo } from "../../types/types";
 import Loading from "../../components/Loading";
 import Card from "react-bootstrap/Card";
 import { Circle, PatchCheckFill } from "react-bootstrap-icons";
-
-interface RemoteAPIMedicament {
-  nregistro: string,
-  nombre: string,
-  labtitular: string,
-  pactivos: string,
-  receta: boolean,
-  generico: boolean,
-  fotos: {tipo: string, url: string, fecha: string}[],
-  docs: {tipo: string, url: string, urlHtml:string, fecha: string}[],
-  viasAdministracion: {id: string, nombre: string}[],
-  formaFarmaceuticaSimplificada: {id: string, nombre: string},
-  dosis: string
-}
+import { Button } from "react-bootstrap";
 
 function TreatmentInfoPage() {
   const [treatmentInfo, setTreatmentInfo] = useState<TreatmentInfo>({
@@ -41,12 +28,13 @@ function TreatmentInfoPage() {
   useEffect(() => {
     getData();
   }, []);
+  const navigate = useNavigate();
   
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://cima.aemps.es/cima/rest/medicamento?nregistro=${treatmentId}`);
-      const treatment: RemoteAPIMedicament = response.data;
+      const response = await axios.get(`${import.meta.env.VITE_MEDS_API_URL}/medicamento?nregistro=${treatmentId}`);
+      const treatment: RemoteAPITreatment = response.data;
       console.log("T", treatment)
       console.log(response);
       setTreatmentInfo({
@@ -99,6 +87,7 @@ function TreatmentInfoPage() {
           <Card.Link href={treatmentInfo.technichalDocURL}>Technical doc</Card.Link>
         </Card.Body>
       </Card>
+      <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
     </div>
   );
 }
