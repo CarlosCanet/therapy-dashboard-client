@@ -40,7 +40,7 @@ export const useFetch = <T>(method: string, url: string, transformationFn: ((dat
   useEffect(() => {
     getData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [url]);
   
   return state;
 };
