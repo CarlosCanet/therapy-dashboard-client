@@ -5,10 +5,6 @@ import axios from "axios";
 import type { Session } from "../types/types";
 import { Link } from "react-router";
 
-function sessionHasId(session: Session): session is Session & { id: string }{
-  return session.id !== undefined && session.id !== null;
-}
-
 function SessionList({ sessions }: { sessions: Session[] }) {
 
   const handleDelete = async (event: React.MouseEvent, sessionId: string) => {
@@ -28,10 +24,9 @@ function SessionList({ sessions }: { sessions: Session[] }) {
     <ListGroup>
         {sessions && 
           sessions
-            .filter(sessionHasId)
             .map((session, index) => (
             <ListGroup.Item as={Link} to={`/sessions/${session.id}`} key={session.id} className="d-flex justify-content-between align-items-center">
-              {session.patient ? session.patient.name : index+1} - Session {session.date.toLocaleDateString()}
+              {session.patient ? session.patient.name : index+1} - Session {session.date.toLocaleDateString("es-ES")}
               <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, session.id)}><Trash color="white" /></Button>
             </ListGroup.Item>
           ))
