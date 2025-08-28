@@ -8,7 +8,6 @@ import NewPatientPage from "./pages/PatientPages/NewPatientPage";
 import SessionListPage from "./pages/SessionPages/SessionListPage";
 import SessionInfoPage from "./pages/SessionPages/SessionInfoPage";
 import NewSessionPage from "./pages/SessionPages/NewSessionPage";
-import SessionListTreePage from "./pages/SessionPages/SessionListTreePage";
 import TreatmentInfoPage from "./pages/TreatmentPages/TreatmentInfoPage";
 import NewTreatmentPage from "./pages/TreatmentPages/NewTreatmentPage";
 
@@ -28,7 +27,6 @@ function App() {
         <Route path="/sessions" element={<SessionListPage />}></Route>
         <Route path="/sessions/:sessionId" element={<SessionInfoPage />}></Route>
         <Route path="/patients/:patientId/new-session" element={<NewSessionPage />}></Route>
-        <Route path="/sessions/tree" element={<SessionListTreePage />}></Route>
         
         <Route path="/treatment-info/:treatmentId" element={<TreatmentInfoPage />}></Route>
         <Route path="/patients/:patientId/new-treatment" element={<NewTreatmentPage />}></Route>
