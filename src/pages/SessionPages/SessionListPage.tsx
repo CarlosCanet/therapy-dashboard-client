@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 
 import SessionList from "../../components/SessionList";
-import { transformDataFetchWithDate } from "../../utils/apiUtils";
+import { transformDataFetchWithDate } from "../../utils/api";
 
 function SessionListPage() {
   const [sessions, setSessions] = useState<Session[]>([]);

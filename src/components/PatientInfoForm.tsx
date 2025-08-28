@@ -1,9 +1,10 @@
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
-import { Genders, type Gender, type Patient } from "../types/types";
+import { Genders, type Gender, type NewPatient, type Patient } from "../types/types";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Badge } from "react-bootstrap";
 
 interface FormDataInterface {
   name: string,
@@ -13,13 +14,11 @@ interface FormDataInterface {
   [key: string]: string | number | string [] | Gender;
 }
 
-interface PatientInfoFormProps {
-  action: "add" | "edit",
-  onSubmit: (patient: Patient) => void
-  patient?: Patient,
-}
+type PatientInfoFormProps = { action: "add", onSubmit: (patient: NewPatient) => Promise<void> } | { action: "edit", onSubmit: (patient: Patient) => Promise<void>, patient: Patient };
 
-function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
+function PatientInfoForm(props: PatientInfoFormProps) {
+  const patient = props.action === "edit" ? props.patient : undefined;
+  const { action, onSubmit } = props;
   const [formData, setFormData] = useState<FormDataInterface>({ name: patient?.name ?? "", age: patient?.age ?? 0, gender: patient?.gender ?? Genders.None, issues: patient?.issues ?? [] });
   const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (action === "add") {
-      const newPatient: Patient = {
+      const newPatient: NewPatient = {
         name: formData.name,
         age: formData.age,
         gender: formData.gender,
@@ -50,7 +49,7 @@ function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
       onSubmit(newPatient);
       console.log("Submiteado add")
     } else if (action === "edit" && patient) {
-      const submittedPatient = {...formData, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: patient.treatments ?? [] };
+      const submittedPatient: Patient = {...formData, id: patient.id, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: patient.treatments ?? [] };
       onSubmit(submittedPatient);
       console.log("Submiteado edit")
     }
@@ -89,7 +88,7 @@ function PatientInfoForm({ action, onSubmit, patient }: PatientInfoFormProps) {
           </Form.Group>
       }
       <ListGroup>
-        <Form.Label>Treatments</Form.Label>
+        <Form.Label>Treatments <Link to={`/patients/${patient?.id}/new-treatment`}><Badge bg="primary" pill>Add treatment</Badge></Link></Form.Label>
         {patient?.treatments.map((treatment, index) => <ListGroup.Item action as={Link} to={`/treatment-info/${treatment.id}`} key={index} className="mb-2">{treatment.name}</ListGroup.Item>)}
       </ListGroup>
       <Form.Group>

@@ -1,9 +1,9 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { type Session } from "../types/types";
-import { useEffect, useState } from "react";
+import { type NewSession, type Session } from "../types/types";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { dateToString } from "../utils/dateUtils";
+import { dateToString } from "../utils/date";
 
 interface FormDataInterface {
   date: string,
@@ -16,19 +16,13 @@ interface FormDataInterface {
   [key: string]: string;
 }
 
-interface SessionInfoFormProps {
-  action: "add" | "edit",
-  onSubmit: (session: Session) => void
-  session?: Session,
-  patientId?: string
-}
+type SessionInfoFormProps = { action: "add", onSubmit: (session: NewSession) => Promise<void>, patientId: string } | { action: "edit", onSubmit: (session: Session) => Promise<void>, session: Session };
 
-function SessionInfoForm({ action, onSubmit, session, patientId }: SessionInfoFormProps) {
+function SessionInfoForm(props: SessionInfoFormProps) {
+  const session = props.action === "edit" ? props.session : undefined;
+  const { action, onSubmit } = props;
   const [formData, setFormData] = useState<FormDataInterface>({ date: dateToString(session?.date), description: session?.description ?? "", problems: session?.problems ?? "" });
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log(session)
-  }, []);
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setFormData(prevState => {
     // console.log(event.target.value);
@@ -38,9 +32,9 @@ function SessionInfoForm({ action, onSubmit, session, patientId }: SessionInfoFo
   
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (action === "add" && patientId) {
-      const newSession: Session = {
-        patientId: patientId,
+    if (action === "add" && props.patientId) {
+      const newSession: NewSession = {
+        patientId: props.patientId,
         description: formData.description,
         date: new Date(formData.date),
         problems: formData.problems
@@ -48,7 +42,7 @@ function SessionInfoForm({ action, onSubmit, session, patientId }: SessionInfoFo
       onSubmit(newSession);
       console.log("Submiteado add")
     } else if (action === "edit" && session) {
-      const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId };
+      const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id };
       onSubmit(submittedSession);
       console.log("Submiteado edit")
     }

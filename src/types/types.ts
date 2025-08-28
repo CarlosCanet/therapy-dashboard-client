@@ -17,7 +17,7 @@ export interface PatientTreatment {
 }
 
 export interface Patient {
-  id?: string,
+  id: string,
   name: string,
   age: number,
   gender: Gender,
@@ -27,6 +27,8 @@ export interface Patient {
   activitiesDone: Activity[],
   sessions?: Session[]
 }
+
+export type NewPatient = Omit<Patient, "id">;
 
 export interface Activity {
   name: string,
@@ -50,8 +52,22 @@ export interface TreatmentInfo {
   dosage: string
 }
 
+export interface RemoteAPITreatment {
+  nregistro: string,
+  nombre: string,
+  labtitular: string,
+  pactivos: string,
+  receta: boolean,
+  generico: boolean,
+  fotos: {tipo: string, url: string, fecha: string}[],
+  docs: {tipo: string, url: string, urlHtml:string, fecha: string}[],
+  viasAdministracion: {id: string, nombre: string}[],
+  formaFarmaceuticaSimplificada: {id: string, nombre: string},
+  dosis: string
+}
+
 export interface Session {
-  id?: string,
+  id: string,
   patientId: string,
   date: Date,
   description: string,
@@ -61,3 +77,5 @@ export interface Session {
   // treatmentInfo: TreatmentInfo,
   patient?: Patient
 }
+
+export type NewSession = Omit<Session, "id">;
