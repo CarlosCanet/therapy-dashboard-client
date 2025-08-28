@@ -65,7 +65,7 @@ function NewTreatmentModal({ show, setShow, onAdd, patientTreatments}: NewTreatm
       setTreatments([]);
       return;
     }
-    
+
     const ampersandNeeded = formData.treatmentName && formData.needPrescription;
     const nombreQuery = formData.treatmentName ? `nombre=${formData.treatmentName}` : "";
     const recetaQuery = formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "";
@@ -88,7 +88,7 @@ function NewTreatmentModal({ show, setShow, onAdd, patientTreatments}: NewTreatm
             <Form.Group as={Row} className="d-flex justify-content-between align-items-center">
               <Col xs={6}>
               <FloatingLabel label="Treatment name">
-                <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange}></Form.Control>
+                <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange} />
               </FloatingLabel>
               </Col>
               <Col xs={6}>

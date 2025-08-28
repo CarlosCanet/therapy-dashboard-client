@@ -55,15 +55,15 @@ function SessionInfoForm(props: SessionInfoFormProps) {
     <Form onSubmit={handleSubmit}>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Description</Form.Label>
-        <Form.Control type="text" name="description"  placeholder="" value={formData.description} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="text" name="description"  placeholder="" value={formData.description} onChange={handleOnChange} />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Date</Form.Label>
-        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange} />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Problems</Form.Label>
-        <Form.Control type="text" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="text" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange} />
       </Form.Group>
       <Form.Group>
         <Button variant="secondary" type="submit">{action === "add" ? "New session" : "Edit session"}</Button>

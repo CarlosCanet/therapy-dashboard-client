@@ -81,7 +81,7 @@ function NewTreatmentPage() {
           <Form.Group as={Row} className="d-flex justify-content-between align-items-center">
             <Col xs={6}>
             <FloatingLabel label="Treatment name">
-              <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange}></Form.Control>
+              <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange} />
             </FloatingLabel>
             </Col>
             <Col xs={6}>
