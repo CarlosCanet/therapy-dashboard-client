@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import type { Patient, PatientTreatment, RemoteAPITreatment } from "../../types/types";
 import axios from "axios";
 import Loading from "../../components/Loading";
@@ -23,6 +23,7 @@ function NewTreatmentPage() {
   const [selectedTreatments, setSelectedTreatments] = useState<PatientTreatment[]>([]);
   const [formData, setFormData] = useState<FormData>({treatmentName: "", needPrescription: ""});
   const { patientId } = useParams()
+  const navigate = useNavigate();
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,6 +43,7 @@ function NewTreatmentPage() {
       const responsePatient = await axios.get(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
       setTreatments(response.data.resultados);
       setPatient(responsePatient.data);
+      setSelectedTreatments(responsePatient.data.treatments);
     } catch (error) {
       console.log(error); //! Do something
     }
@@ -50,12 +52,6 @@ function NewTreatmentPage() {
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     console.log(event.target.value)
     setFormData(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }))
-    // if (event.target.type === "text") {
-    //   setFormData(prevFormData => ({ ...prevFormData, treatmentName: event.target.value }))
-    // } else
-    // } else if (event.target.type === "checkbox") {
-    //   setFormData(prevFormData => ({ ...prevFormData, needPrescription: event.target.checked }))
-    // }
   }
 
   if (!patient) {
@@ -70,13 +66,19 @@ function NewTreatmentPage() {
     setSelectedTreatments((prevSelected) => prevSelected.toSpliced(index, 1));
   }
 
-  const handleOnAdd = () => {
-
+  const handleOnAdd = async () => {
+    try {
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, { treatments: selectedTreatments });
+      console.log(response);
+      navigate(-1);
+    } catch (error) {
+      console.log(error); //! Do something
+    }
   }
 
   return (
     <div className="d-flex flex-column gap-2">
-      <h1>{patient.name}</h1>
+      <h1 onClick={() => navigate(-1)}>{patient.name}</h1>
       <Button onClick={handleOnAdd}>Add meds</Button>
       <Card>
         <Card.Body>
