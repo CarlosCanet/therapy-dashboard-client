@@ -8,6 +8,7 @@ import { useFetch, type APIResponse } from "../../hooks/useFetch";
 
 import SessionList from "../../components/SessionList";
 import { transformDataFetchWithDate } from "../../utils/api";
+import SessionListTree from "../../components/SessionListTree";
 
 function SessionListPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -16,7 +17,7 @@ function SessionListPage() {
   const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
   const [sortField, setSortField] = useState<string>("");
-  console.log("Query:", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient${selectedPatient ? `&patientId=${selectedPatient.id}` : ""}`)
+  const [isGrouped, setIsGrouped] = useState(false);
   const sessionsApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient${selectedPatient ? `&patientId=${selectedPatient.id}` : ""}`, transformDataFetchWithDate);
   const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
   useEffect(() => {
@@ -36,36 +37,45 @@ function SessionListPage() {
 
   const handleOnChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.name === "dateFrom") {
-      setFilterStartDate(new Date(event.target.value));
+      setFilterStartDate(event.target.value ? new Date(event.target.value) : null);
     } else if (event.target.name === "dateTo") {
-      setFilterEndDate(new Date(event.target.value));
+      setFilterEndDate(event.target.value ? new Date(event.target.value) : null);
     }
+  }
+
+  const handleOnChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsGrouped(event.target.checked);
   }
 
   const handleOnChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortField(event.target.value);
   }
 
-  const sessionWithinStartDate    = (session: Session) => !filterStartDate || session.date >= filterStartDate;
-  const sessionWithinEndDate      = (session: Session) => !filterEndDate || session.date <= filterEndDate;
-  const sessionsSortByPatientAsc  = (session1: Session, session2: Session) => (session1.patient?.name ?? "").localeCompare((session2.patient?.name) ?? "");
-  const sessionsSortByPatientDesc = (session1: Session, session2: Session) => (session2.patient?.name ?? "").localeCompare((session1.patient?.name) ?? "");
-  const sessionsSortByDateAsc     = (session1: Session, session2: Session) => session1.date.getTime() - session2.date.getTime();
-  const sessionsSortByDateDesc = (session1: Session, session2: Session) => session2.date.getTime() - session1.date.getTime();
+  const sessionWithinStartDate  = (session: Session) => !filterStartDate || session.date >= filterStartDate;
+  const sessionWithinEndDate    = (session: Session) => !filterEndDate || session.date <= filterEndDate;
+  const sessionsByPatientAsc    = (session1: Session, session2: Session) => (session1.patient?.name ?? "").localeCompare((session2.patient?.name) ?? "");
+  const sessionsByPatientDesc   = (session1: Session, session2: Session) => (session2.patient?.name ?? "").localeCompare((session1.patient?.name) ?? "");
+  const sessionsByDateAsc       = (session1: Session, session2: Session) => session1.date.getTime() - session2.date.getTime();
+  const sessionsByDateDesc      = (session1: Session, session2: Session) => session2.date.getTime() - session1.date.getTime();
+  const patientsByNameAsc       = (patient1: Patient, patient2: Patient) => patient1.name.localeCompare(patient2.name);
+  const patientsByNameDesc      = (patient1: Patient, patient2: Patient) => patient2.name.localeCompare(patient1.name);
   
-  const sortedSessions = [...sessions].filter(sessionWithinStartDate).filter(sessionWithinEndDate);
+  const sortedSessions = sessions.filter(sessionWithinStartDate).filter(sessionWithinEndDate);
+  const sortedPatients = [...patients];
   switch (sortField) {
     case "alphaAsc":
-      sortedSessions.sort(sessionsSortByPatientAsc);
+      sortedSessions.sort(sessionsByPatientAsc);
+      sortedPatients.sort(patientsByNameAsc);
       break;
     case "alphaDsc":
-      sortedSessions.sort(sessionsSortByPatientDesc);
+      sortedSessions.sort(sessionsByPatientDesc);
+      sortedPatients.sort(patientsByNameDesc);
       break;
     case "dateAsc":
-      sortedSessions.sort(sessionsSortByDateAsc);
+      sortedSessions.sort(sessionsByDateAsc);
       break;
     case "dateDsc":
-      sortedSessions.sort(sessionsSortByDateDesc);
+      sortedSessions.sort(sessionsByDateDesc);
       break;
   }
 
@@ -87,17 +97,24 @@ function SessionListPage() {
             <Form.Control size="sm" name="dateTo" type="date" onChange={handleOnChangeDate}/>
           </FloatingLabel>
         </Row>
-        <FloatingLabel label="Sort by" className="my-3" controlId="dateToFilter">
-          <Form.Select value={sortField} onChange={handleOnChangeSort}>
-            <option value=""></option>
-            <option value="alphaAsc">Alphabetical ↑</option>
-            <option value="alphaDsc">Alphabetical ↓</option>
-            <option value="dateAsc">Date ↑</option>
-            <option value="dateDsc">Date ↓</option>
-          </Form.Select>
-        </FloatingLabel>
+        <Row className="align-items-center">
+          <Col>
+            <Form.Switch label="Group by patient" checked={isGrouped} onChange={handleOnChecked} />
+          </Col>
+          <Col>
+            <FloatingLabel label="Sort by" className="my-3" controlId="dateToFilter">
+              <Form.Select value={sortField} onChange={handleOnChangeSort}>
+                <option value=""></option>
+                <option value="alphaAsc">Alphabetical ↑</option>
+                <option value="alphaDsc">Alphabetical ↓</option>
+                <option value="dateAsc">Date ↑</option>
+                <option value="dateDsc">Date ↓</option>
+              </Form.Select>
+            </FloatingLabel>
+          </Col>
+        </Row>
       </Form.Group>
-      <SessionList sessions={sortedSessions}/>
+      {isGrouped ? <SessionListTree sessions={sortedSessions} patients={sortedPatients}/> : <SessionList sessions={sortedSessions}/>}
     </div>
   )
 }

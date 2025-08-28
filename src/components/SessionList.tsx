@@ -26,7 +26,7 @@ function SessionList({ sessions }: { sessions: Session[] }) {
           sessions
             .map((session, index) => (
             <ListGroup.Item as={Link} to={`/sessions/${session.id}`} key={session.id} className="d-flex justify-content-between align-items-center">
-              {session.patient ? session.patient.name : index+1} - Session {session.date.toLocaleDateString("es-ES")}
+              {session.patient ? session.patient.name : index+1} - Session {session.date.toLocaleDateString()}
               <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, session.id)}><Trash color="white" /></Button>
             </ListGroup.Item>
           ))
