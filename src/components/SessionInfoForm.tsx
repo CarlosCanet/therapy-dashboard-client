@@ -46,6 +46,7 @@ function SessionInfoForm(props: SessionInfoFormProps) {
       onSubmit(submittedSession);
       console.log("Submiteado edit")
     }
+    navigate(-1);
   }
   
   return (

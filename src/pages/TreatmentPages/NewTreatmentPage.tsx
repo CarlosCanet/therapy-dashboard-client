@@ -35,9 +35,6 @@ function NewTreatmentPage() {
     console.log("Test", formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "");
     const recetaQuery = formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "";
     const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
-    console.log("Query", query);
-    // const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
-    console.log(query)
     try {
       const response = await axios.get(`${import.meta.env.VITE_MEDS_API_URL}/medicamentos?${query}`);
       const responsePatient = await axios.get(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
