@@ -10,10 +10,6 @@ import { useEffect, useState } from "react";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 import Loading from "../../components/Loading";
 
-function patientHasId(patient: Patient): patient is Patient & { id: string }{
-  return patient.id !== undefined && patient.id !== null;
-}
-
 function PatientsListPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
@@ -51,7 +47,6 @@ function PatientsListPage() {
             </FloatingLabel>
             <ListGroup>
               {patients
-                .filter(patientHasId)
                 .map((patient) => (
                   (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center">
                   {patient.name}

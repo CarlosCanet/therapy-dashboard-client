@@ -3,7 +3,7 @@ import DashboardCard from "../components/DashboardCard"
 import type { Patient, Session } from "../types/types"
 import { useFetch, type APIResponse } from "../hooks/useFetch";
 import Loading from "../components/Loading";
-import { transformDataFetchWithDate } from "../utils/apiUtils";
+import { transformDataFetchWithDate } from "../utils/api";
 
 function DashboardPage() {
   const [patients, setPatients] = useState<Patient[]>([]);

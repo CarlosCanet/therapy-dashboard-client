@@ -1,11 +1,12 @@
 import axios from "axios";
-import type { Session } from "../../types/types";
+import type { NewSession } from "../../types/types";
 import SessionInfoForm from "../../components/SessionInfoForm";
 import { useParams } from "react-router";
+import ErrorCard from "../../components/ErrorCard";
 
 function NewSessionPage() {
   const { patientId } = useParams();
-  const onAdd = async (session: Session) => {
+  const onAdd = async (session: NewSession) => {
     try {
       console.log("New session:", session);
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/sessions/`, session);
@@ -13,6 +14,10 @@ function NewSessionPage() {
     } catch (error) {
       console.log(error); //! It should display something
     }
+  }
+
+  if (!patientId) {
+    return <ErrorCard />
   }
 
   return (

@@ -11,17 +11,24 @@ export const Genders = {
 
 export type Gender = typeof Genders[keyof typeof Genders];
 
+export interface PatientTreatment {
+  id: string,
+  name: string,
+}
+
 export interface Patient {
-  id?: string,
+  id: string,
   name: string,
   age: number,
   gender: Gender,
   issues: string [],
-  treatments: string [],
+  treatments: PatientTreatment [],
   activitiesPending: Activity[],
   activitiesDone: Activity[],
   sessions?: Session[]
 }
+
+export type NewPatient = Omit<Patient, "id">;
 
 export interface Activity {
   name: string,
@@ -30,13 +37,37 @@ export interface Activity {
 }
 
 export interface TreatmentInfo {
-  treatment: string,
-  date: Date,
-  info: string
+  id: string;
+  name: string;
+  labName: string;
+  activePrinciples: string;
+  needPrescription: boolean;
+  isGeneric: boolean;
+  treatmentImageURL: string;
+  boxImageURL: string;
+  technichalDocURL: string;
+  leafletURL: string;
+  administration: string;
+  pharmaForm: string,
+  dosage: string
+}
+
+export interface RemoteAPITreatment {
+  nregistro: string,
+  nombre: string,
+  labtitular: string,
+  pactivos: string,
+  receta: boolean,
+  generico: boolean,
+  fotos: {tipo: string, url: string, fecha: string}[],
+  docs: {tipo: string, url: string, urlHtml:string, fecha: string}[],
+  viasAdministracion: {id: string, nombre: string}[],
+  formaFarmaceuticaSimplificada: {id: string, nombre: string},
+  dosis: string
 }
 
 export interface Session {
-  id?: string,
+  id: string,
   patientId: string,
   date: Date,
   description: string,
@@ -46,3 +77,5 @@ export interface Session {
   // treatmentInfo: TreatmentInfo,
   patient?: Patient
 }
+
+export type NewSession = Omit<Session, "id">;

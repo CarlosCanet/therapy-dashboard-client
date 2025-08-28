@@ -31,7 +31,7 @@ function App() {
         <Route path="/sessions/tree" element={<SessionListTreePage />}></Route>
         
         <Route path="/treatment-info/:treatmentId" element={<TreatmentInfoPage />}></Route>
-        <Route path="/new-treatment" element={<NewTreatmentPage />}></Route>
+        <Route path="/patients/:patientId/new-treatment" element={<NewTreatmentPage />}></Route>
        
         
         <Route path="*" element={<NotFoundPage />}></Route>

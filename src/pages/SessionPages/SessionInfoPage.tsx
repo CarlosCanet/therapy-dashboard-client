@@ -1,12 +1,12 @@
 import { useParams } from "react-router"
-import type { Session } from "../../types/types";
+import type { NewSession, Session } from "../../types/types";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
-import { dateToString } from "../../utils/dateUtils";
-import { transformDataFetchWithDate } from "../../utils/apiUtils";
+import { dateToString } from "../../utils/date";
+import { transformDataFetchWithDate } from "../../utils/api";
 import axios from "axios";
 
 function SessionInfoPage() {
@@ -26,7 +26,7 @@ function SessionInfoPage() {
     return <ErrorCard />
   }
 
-  const onEdit = async (session: Session) => {
+  const onEdit = async (session: Session | NewSession) => {
     console.log(session);
     try {
       const response = await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);

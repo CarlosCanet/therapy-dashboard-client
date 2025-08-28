@@ -1,4 +1,4 @@
-import type { Patient } from "../../types/types";
+import type { NewPatient, Patient } from "../../types/types";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
@@ -8,7 +8,7 @@ import PatientInfoForm from "../../components/PatientInfoForm";
 import axios from "axios";
 import Badge from "react-bootstrap/Badge";
 import SessionList from "../../components/SessionList";
-import { transformDataFetchWithDate } from "../../utils/apiUtils";
+import { transformDataFetchWithDate } from "../../utils/api";
 
 
 function PatientInfoPage() {
@@ -28,7 +28,7 @@ function PatientInfoPage() {
     return <ErrorCard />
   }
 
-  const onEdit = async (patient: Patient) => {
+  const onEdit = async (patient: Patient | NewPatient) => {
     try {
       const response = await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, patient);
       console.log("Patch response:", response);
