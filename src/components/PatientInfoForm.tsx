@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import { Genders, type Gender, type NewPatient, type Patient, type PatientTreatment } from "../types/types";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Badge } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
 import NewTreatmentModal from "./NewTreatmentModal";
 import { dateToString } from "../utils/date";
 import { DashCircle } from "react-bootstrap-icons";
@@ -91,62 +91,66 @@ function PatientInfoForm(props: PatientInfoFormProps) {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group className="my-3" controlId="">
-        <Form.Label>Name</Form.Label>
-        <Form.Control type="text" name="name" placeholder="" value={formData.name} onChange={handleOnChange} />
-      </Form.Group>
-      <Form.Group className="my-3" controlId="">
-        <Form.Label>Date of birth</Form.Label>
-        <Form.Control type="date" name="dob" placeholder="" value={formData.dob} onChange={handleOnChange} />
-      </Form.Group>
-      <Form.Group className="my-3" controlId="">
-        <Form.Label>Gender</Form.Label>
-        {/* <Form.Control type="" placeholder="" value={formData.gender} onChange={handleOnChange} /> */}
-        <Form.Select aria-label="SELECT" name="gender" value={formData.gender} onChange={handleOnChange}>
-          <option>Select gender</option>
-          {Object.values(Genders).map((gender) => (
-            <option key={gender} value={gender}>
-              {gender}
-            </option>
-          ))}
-        </Form.Select>
-      </Form.Group>
-      <Form.Group className="my-3 d-flex flex-column gap-2" controlId="">
-        <Form.Label>Issues</Form.Label>
-        {formData.issues.map((issue, index) => {
-            return (
-              <Form.Group className="d-flex align-items-center gap-2">
-                <Form.Control key={`issue${index}`} type="type" placeholder="" name={`issues[${index}]`} value={formData.issues[index]} onChange={(event) => handleOnChangeIssues(event, index)} />
-                <DashCircle className={`plus-icon ${(index === (formData.issues.length - 1)) ? "hidden" : ""}`} onClick={() => handleDeleteIssue(index)} />
-              </Form.Group>
-            );
-          })
-        }
-      </Form.Group>
-      <ListGroup>
-        <Form.Label>
-          Treatments{" "}
-          <Badge bg="primary" pill onClick={() => setShowAddTreatmentModal((prevState) => !prevState)}>
-            Add treatment
-          </Badge>
-        </Form.Label>
-        {formData.treatments.map((treatment, index) => (
-          <ListGroup.Item action as={Link} to={`/treatment-info/${treatment.id}`} key={index} className="mb-2">
-            {treatment.name}
-          </ListGroup.Item>
-        ))}
-        <NewTreatmentModal show={showAddTreatmentModal} setShow={setShowAddTreatmentModal} onAdd={handleOnAdd} patientTreatments={formData.treatments} />
-      </ListGroup>
-      <Form.Group>
-        <Button variant="secondary" type="submit">
-          {action === "add" ? "New patient" : "Edit patient"}
-        </Button>
-        <Button variant="danger" onClick={() => navigate(-1)}>
-          Back
-        </Button>
-      </Form.Group>
-    </Form>
+    <Card className="mt-3">
+      <Card.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="my-3" controlId="">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" name="name" placeholder="" value={formData.name} onChange={handleOnChange} />
+          </Form.Group>
+          <Form.Group className="my-3" controlId="">
+            <Form.Label>Date of birth</Form.Label>
+            <Form.Control type="date" name="dob" placeholder="" value={formData.dob} onChange={handleOnChange} />
+          </Form.Group>
+          <Form.Group className="my-3" controlId="">
+            <Form.Label>Gender</Form.Label>
+            {/* <Form.Control type="" placeholder="" value={formData.gender} onChange={handleOnChange} /> */}
+            <Form.Select aria-label="SELECT" name="gender" value={formData.gender} onChange={handleOnChange}>
+              <option>Select gender</option>
+              {Object.values(Genders).map((gender) => (
+                <option key={gender} value={gender}>
+                  {gender}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="my-3 d-flex flex-column gap-2" controlId="">
+            <Form.Label>Issues</Form.Label>
+            {formData.issues.map((_issue, index) => {
+              return (
+                <Form.Group className="d-flex align-items-center gap-2">
+                    <Form.Control key={`issue${index}`} type="type" placeholder="" name={`issues[${index}]`} value={formData.issues[index]} onChange={(event) => handleOnChangeIssues(event, index)} />
+                    <DashCircle className={`plus-icon ${(index === (formData.issues.length - 1)) ? "hidden" : ""}`} onClick={() => handleDeleteIssue(index)} />
+                  </Form.Group>
+                );
+              })
+            }
+          </Form.Group>
+          <ListGroup>
+            <Form.Label>
+              Treatments{" "}
+              <Badge bg="primary" pill onClick={() => setShowAddTreatmentModal((prevState) => !prevState)}>
+                Add treatment
+              </Badge>
+            </Form.Label>
+            {formData.treatments.map((treatment, index) => (
+              <ListGroup.Item action as={Link} to={`/treatment-info/${treatment.id}`} key={index} className="mb-2">
+                {treatment.name}
+              </ListGroup.Item>
+            ))}
+            <NewTreatmentModal show={showAddTreatmentModal} setShow={setShowAddTreatmentModal} onAdd={handleOnAdd} patientTreatments={formData.treatments} />
+          </ListGroup>
+          <Form.Group className="d-flex justify-content-center gap-4">
+            <Button variant="secondary" type="submit">
+              {action === "add" ? "New patient" : "Edit patient"}
+            </Button>
+            <Button variant="danger" onClick={() => navigate(-1)}>
+              Back
+            </Button>
+          </Form.Group>
+          </Form>
+        </Card.Body>
+      </Card>
   );
 }
 export default PatientInfoForm;
