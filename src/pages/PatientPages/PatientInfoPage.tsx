@@ -1,4 +1,4 @@
-import type { NewPatient, Patient } from "../../types/types";
+import type { NewPatient, Patient, PatientWithSessions } from "../../types/types";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
@@ -8,13 +8,13 @@ import PatientInfoForm from "../../components/PatientInfoForm";
 import axios from "axios";
 import Badge from "react-bootstrap/Badge";
 import SessionList from "../../components/SessionList";
-import { transformDataFetchWithDate } from "../../utils/api";
-
+import { transformPatientWithSessions } from "../../utils/api";
+import { dateToString } from "../../utils/date";
 
 function PatientInfoPage() {
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<PatientWithSessions | null>(null);
   const { patientId } = useParams();
-  const patientApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients/${patientId}?_embed=sessions`, transformDataFetchWithDate);
+  const patientApiResponse: APIResponse<PatientWithSessions> = useFetch<PatientWithSessions>("get", `${import.meta.env.VITE_API_URL}/patients/${patientId}?_embed=sessions`, transformPatientWithSessions);
   useEffect(() => {
      if (!patientApiResponse.loading && patientApiResponse.data && !Array.isArray(patientApiResponse.data)) {
       setPatient(patientApiResponse.data);
@@ -30,8 +30,7 @@ function PatientInfoPage() {
 
   const onEdit = async (patient: Patient | NewPatient) => {
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, patient);
-      console.log("Patch response:", response);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, {...patient, dob: dateToString(patient.dob)});
     } catch (error) {
       console.log(error); //! It should display something
     }
@@ -46,6 +45,7 @@ function PatientInfoPage() {
       <Link to={`/patients/${patient.id}/new-session`}>
         <Badge className="my-1">Add new Session</Badge>
       </Link>
+      
       <SessionList sessions={patient.sessions ?? []}/>
     </div>
   )

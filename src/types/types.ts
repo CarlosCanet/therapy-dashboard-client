@@ -19,15 +19,15 @@ export interface PatientTreatment {
 export interface Patient {
   id: string,
   name: string,
-  age: number,
+  dob: Date,
   gender: Gender,
   issues: string [],
   treatments: PatientTreatment [],
   activitiesPending: Activity[],
   activitiesDone: Activity[],
-  sessions?: Session[]
 }
 
+export type PatientWithSessions = Patient & { sessions: Session[] };
 export type NewPatient = Omit<Patient, "id">;
 
 export interface Activity {
@@ -72,10 +72,9 @@ export interface Session {
   date: Date,
   description: string,
   problems: string,
-  // activitiesReviewed: Activity[],
-  // activitiesProposed: Activity[],
-  // treatmentInfo: TreatmentInfo,
-  patient?: Patient
+  activitiesReviewed: Activity[],
+  activitiesProposed: Activity[]
 }
 
+export type SessionWithPatient = Session & { patient: Patient };
 export type NewSession = Omit<Session, "id">;

@@ -52,7 +52,6 @@ function TreatmentInfoPage() {
         pharmaForm: treatment.formaFarmaceuticaSimplificada.nombre,
         dosage: treatment.dosis
       });
-      console.log("HEY!")
       setLoading(false);
     } catch (error) {
       console.log(error); //! Do something!

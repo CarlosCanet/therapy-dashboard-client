@@ -1,18 +1,18 @@
 import { useParams } from "react-router"
-import type { NewSession, Session } from "../../types/types";
+import type { Session, SessionWithPatient } from "../../types/types";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
 import { dateToString } from "../../utils/date";
-import { transformDataFetchWithDate } from "../../utils/api";
+import { transformSessionWithPatient } from "../../utils/api";
 import axios from "axios";
 
 function SessionInfoPage() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<SessionWithPatient | null>(null);
   const { sessionId } = useParams();
-  const sessionApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformDataFetchWithDate);
+  const sessionApiResponse: APIResponse<SessionWithPatient> = useFetch<SessionWithPatient>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformSessionWithPatient);
   useEffect(() => {
      if (!sessionApiResponse.loading && sessionApiResponse.data && !Array.isArray(sessionApiResponse.data)) {
        setSession(sessionApiResponse.data);
@@ -26,7 +26,7 @@ function SessionInfoPage() {
     return <ErrorCard />
   }
 
-  const onEdit = async (session: Session | NewSession) => {
+  const onEdit = async (session: Session) => {
     console.log(session);
     try {
       const response = await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);

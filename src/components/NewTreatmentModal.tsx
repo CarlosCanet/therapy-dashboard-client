@@ -14,7 +14,8 @@ import { InfoSquareFill } from 'react-bootstrap-icons';
 interface NewTreatmentModalProps {
   show: boolean,
   setShow: Dispatch<SetStateAction<boolean>>,
-  onAdd: (treatments: RemoteAPITreatment[]) => void
+  onAdd: (treatments: PatientTreatment[]) => void,
+  patientTreatments: PatientTreatment[],
 }
 
 type FormData = {
@@ -22,9 +23,9 @@ type FormData = {
   needPrescription: "0" | "1" | ""
 }
 
-function NewTreatmentModal({ show, setShow, onAdd}: NewTreatmentModalProps) {
+function NewTreatmentModal({ show, setShow, onAdd, patientTreatments}: NewTreatmentModalProps) {
   const [treatments, setTreatments] = useState<RemoteAPITreatment[]>([]);
-  const [selectedTreatments, setSelectedTreatments] = useState<PatientTreatment[]>([]);
+  const [selectedTreatments, setSelectedTreatments] = useState<PatientTreatment[]>(patientTreatments);
   const [formData, setFormData] = useState<FormData>({ treatmentName: "", needPrescription: "" });
   const [timeoutId, setTimeoutId] = useState<number>(0);
   
@@ -38,20 +39,21 @@ function NewTreatmentModal({ show, setShow, onAdd}: NewTreatmentModalProps) {
   }, [formData]);
   
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    console.log(event.target.value)
     setFormData(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }))
   }
 
   const handleClose = () => {
-    setShow(prevShow => !prevShow);
+    setShow(false);
   }
 
   const handleOnAdd = () => {
-    onAdd(treatments);
+    onAdd(selectedTreatments);
+    setShow(false);
   }
 
   const onSelectTreatment = (treatment: RemoteAPITreatment) => {
     setSelectedTreatments((prevSelected) => [...prevSelected, { name: treatment.nombre, id: treatment.nregistro }]);
+    setFormData({ treatmentName: "", needPrescription: "" });
   }
 
   const onUnselectTreatment = (index: number) => {
@@ -59,9 +61,13 @@ function NewTreatmentModal({ show, setShow, onAdd}: NewTreatmentModalProps) {
   }
 
   const getData = async () => {
+    if (formData.treatmentName === "" && formData.needPrescription === "") {
+      setTreatments([]);
+      return;
+    }
+    
     const ampersandNeeded = formData.treatmentName && formData.needPrescription;
     const nombreQuery = formData.treatmentName ? `nombre=${formData.treatmentName}` : "";
-    console.log("Test", formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "");
     const recetaQuery = formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "";
     const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
     try {
@@ -73,7 +79,7 @@ function NewTreatmentModal({ show, setShow, onAdd}: NewTreatmentModalProps) {
   }
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title>Add meds</Modal.Title>
         </Modal.Header>
@@ -119,12 +125,8 @@ function NewTreatmentModal({ show, setShow, onAdd}: NewTreatmentModalProps) {
       }
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleOnAdd}>
-            Save Changes
-          </Button>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="primary" onClick={handleOnAdd}>Save Changes</Button>
         </Modal.Footer>
       </Modal>
   )

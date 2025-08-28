@@ -3,13 +3,13 @@ import DashboardCard from "../components/DashboardCard"
 import type { Patient, Session } from "../types/types"
 import { useFetch, type APIResponse } from "../hooks/useFetch";
 import Loading from "../components/Loading";
-import { transformDataFetchWithDate } from "../utils/api";
+import { transformSession } from "../utils/api";
 
 function DashboardPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
-  const sessionsApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient`, transformDataFetchWithDate);
+  const sessionsApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient`, transformSession);
   useEffect(() => {
     if (!patientsApiResponse.loading && patientsApiResponse.data && Array.isArray(patientsApiResponse.data)) {
       setPatients(patientsApiResponse.data);

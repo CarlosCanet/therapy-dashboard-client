@@ -32,7 +32,6 @@ function NewTreatmentPage() {
   const getData = async () => {
     const ampersandNeeded = formData.treatmentName && formData.needPrescription;
     const nombreQuery = formData.treatmentName ? `nombre=${formData.treatmentName}` : "";
-    console.log("Test", formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "");
     const recetaQuery = formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "";
     const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
     try {
