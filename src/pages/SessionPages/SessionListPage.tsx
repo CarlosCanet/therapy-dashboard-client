@@ -2,23 +2,23 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { type Patient, type Session } from "../../types/types";
+import { type Patient, type Session, type SessionWithPatient } from "../../types/types";
 import { useEffect, useState } from "react";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 
 import SessionList from "../../components/SessionList";
-import { transformDataFetchWithDate } from "../../utils/api";
+import { transformSessionWithPatient } from "../../utils/api";
 import SessionListTree from "../../components/SessionListTree";
 
 function SessionListPage() {
-  const [sessions, setSessions] = useState<Session[]>([]);
+  const [sessions, setSessions] = useState<SessionWithPatient[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | undefined>(undefined);
   const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
   const [sortField, setSortField] = useState<string>("");
   const [isGrouped, setIsGrouped] = useState(false);
-  const sessionsApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient${selectedPatient ? `&patientId=${selectedPatient.id}` : ""}`, transformDataFetchWithDate);
+  const sessionsApiResponse: APIResponse<SessionWithPatient> = useFetch<SessionWithPatient>("get", `${import.meta.env.VITE_API_URL}/sessions?_expand=patient${selectedPatient ? `&patientId=${selectedPatient.id}` : ""}`, transformSessionWithPatient);
   const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
   useEffect(() => {
     if (!sessionsApiResponse.loading && sessionsApiResponse.data && Array.isArray(sessionsApiResponse.data)) {
@@ -53,10 +53,10 @@ function SessionListPage() {
 
   const sessionWithinStartDate  = (session: Session) => !filterStartDate || session.date >= filterStartDate;
   const sessionWithinEndDate    = (session: Session) => !filterEndDate || session.date <= filterEndDate;
-  const sessionsByPatientAsc    = (session1: Session, session2: Session) => (session1.patient?.name ?? "").localeCompare((session2.patient?.name) ?? "");
-  const sessionsByPatientDesc   = (session1: Session, session2: Session) => (session2.patient?.name ?? "").localeCompare((session1.patient?.name) ?? "");
-  const sessionsByDateAsc       = (session1: Session, session2: Session) => session1.date.getTime() - session2.date.getTime();
-  const sessionsByDateDesc      = (session1: Session, session2: Session) => session2.date.getTime() - session1.date.getTime();
+  const sessionsByPatientAsc    = (session1: SessionWithPatient, session2: SessionWithPatient) => (session1.patient.name ?? "").localeCompare((session2.patient.name) ?? "");
+  const sessionsByPatientDesc   = (session1: SessionWithPatient, session2: SessionWithPatient) => (session2.patient.name ?? "").localeCompare((session1.patient.name) ?? "");
+  const sessionsByDateAsc       = (session1: SessionWithPatient, session2: SessionWithPatient) => session1.date.getTime() - session2.date.getTime();
+  const sessionsByDateDesc      = (session1: SessionWithPatient, session2: SessionWithPatient) => session2.date.getTime() - session1.date.getTime();
   const patientsByNameAsc       = (patient1: Patient, patient2: Patient) => patient1.name.localeCompare(patient2.name);
   const patientsByNameDesc      = (patient1: Patient, patient2: Patient) => patient2.name.localeCompare(patient1.name);
   
@@ -114,7 +114,7 @@ function SessionListPage() {
           </Col>
         </Row>
       </Form.Group>
-      {isGrouped ? <SessionListTree sessions={sortedSessions} patients={sortedPatients}/> : <SessionList sessions={sortedSessions}/>}
+      {isGrouped ? <SessionListTree sessions={sortedSessions} /> : <SessionList sessions={sortedSessions}/>}
     </div>
   )
 }
