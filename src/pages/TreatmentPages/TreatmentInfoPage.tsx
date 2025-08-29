@@ -27,6 +27,7 @@ function TreatmentInfoPage() {
   const { treatmentId } = useParams();
   useEffect(() => {
     getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const navigate = useNavigate();
   

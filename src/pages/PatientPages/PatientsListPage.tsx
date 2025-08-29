@@ -47,7 +47,7 @@ function PatientsListPage() {
               {patients
                 .filter(eachPatient => eachPatient.name.includes(filterPatientName))
                 .map((patient) => (
-                  (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center">
+                  (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center" variant="primary">
                   {patient.name}
                   <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, patient.id)}><Trash color="white" /></Button>
                 </ListGroup.Item>)

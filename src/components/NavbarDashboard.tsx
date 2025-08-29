@@ -21,6 +21,7 @@ function NavbarDashboard() {
               <NavDropdown.Item as={Link} to="/patients" className='text-secondary' onClick={()=>setExpanded(false)}>Patient list</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/new-patient" className='text-secondary' onClick={()=>setExpanded(false)}>Add new patient</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link as={Link} to="/sessions" className='text-secondary' onClick={()=>setExpanded(false)}>Sessions</Nav.Link>
             <Nav.Link as={Link} to="/calendar" className='text-secondary' onClick={()=>setExpanded(false)}>Calendar</Nav.Link>
           </Nav>
         </Navbar.Collapse>
