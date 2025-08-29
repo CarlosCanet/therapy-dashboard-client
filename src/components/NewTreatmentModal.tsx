@@ -11,6 +11,7 @@ import axios from "axios";
 import { Link } from "react-router";
 import { InfoSquareFill } from "react-bootstrap-icons";
 import { Container } from "react-bootstrap";
+import ToastMessage from "./ToastMessage";
 
 interface NewTreatmentModalProps {
   show: boolean;
@@ -29,6 +30,7 @@ function NewTreatmentModal({ show, setShow, onAdd, patientTreatments }: NewTreat
   const [selectedTreatments, setSelectedTreatments] = useState<PatientTreatment[]>(patientTreatments);
   const [formData, setFormData] = useState<FormData>({ treatmentName: "", needPrescription: "" });
   const [timeoutId, setTimeoutId] = useState<number>(0);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   useEffect(() => {
     if (timeoutId) {
@@ -75,7 +77,8 @@ function NewTreatmentModal({ show, setShow, onAdd, patientTreatments }: NewTreat
       const response = await axios.get(`${import.meta.env.VITE_MEDS_API_URL}/medicamentos?${query}`);
       setTreatments(response.data.resultados);
     } catch (error) {
-      console.log(error); //! Do something
+      console.error("Error getting med info from API:", error);
+      setShowToast(true);
     }
   };
 
@@ -146,6 +149,7 @@ function NewTreatmentModal({ show, setShow, onAdd, patientTreatments }: NewTreat
           Save Changes
         </Button>
       </Modal.Footer>
+      <ToastMessage variant="danger" message="Something went wrong getting the info" delay={5000} show={showToast} setShow={setShowToast}/>
     </Modal>
   );
 }

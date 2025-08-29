@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
-import { Genders, type Gender, type NewPatient, type Patient, type PatientTreatment } from "../types/types";
+import { Genders, type Gender, type NewPatient, type Patient, type PatientTreatment, type ToastInfo } from "../types/types";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Badge, Card } from "react-bootstrap";
@@ -17,11 +17,6 @@ interface FormDataInterface {
   issues: string[];
   treatments: { id: string; name: string }[];
   [key: string]: string | Date | string[] | Gender | { id: string; name: string }[];
-}
-
-interface ToastInfo {
-  variant: string;
-  message: string;
 }
 
 type PatientInfoFormProps = { action: "add"; onSubmit: (patient: NewPatient) => Promise<void> } | { action: "edit"; onSubmit: (patient: Patient) => Promise<void>; patient: Patient };
@@ -59,27 +54,31 @@ function PatientInfoForm(props: PatientInfoFormProps) {
     setFormData((prevState) => ({ ...prevState, issues: updatedIssues }));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (action === "add") {
-      const newPatient: NewPatient = {
-        name: formData.name,
-        dob: new Date(formData.dob),
-        gender: formData.gender,
-        issues: filterEmptyIssues(formData.issues),
-        activitiesPending: [],
-        activitiesDone: [],
-        treatments: [],
-      };
-      onSubmit(newPatient);
-      setToastInfo({message: "Patient added", variant: "primary"});
-    } else if (action === "edit" && patient) {
-      const submittedPatient: Patient = { ...formData, dob: new Date(formData.dob), id: patient.id, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: formData.treatments ?? [], issues: filterEmptyIssues(formData.issues) };
-      onSubmit(submittedPatient);
-      setToastInfo({message: "Patient edited", variant: "secondary"});
+  const handleSubmit = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
+      if (action === "add") {
+        const newPatient: NewPatient = {
+          name: formData.name,
+          dob: new Date(formData.dob),
+          gender: formData.gender,
+          issues: filterEmptyIssues(formData.issues),
+          activitiesPending: [],
+          activitiesDone: [],
+          treatments: [],
+        };
+        await onSubmit(newPatient);
+      } else if (action === "edit" && patient) {
+        const submittedPatient: Patient = { ...formData, dob: new Date(formData.dob), id: patient.id, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: formData.treatments ?? [], issues: filterEmptyIssues(formData.issues) };
+        await onSubmit(submittedPatient);
+      }
+      setShowToast(true);
+      navigate("/patients");
+    } catch (error) {
+      setToastInfo(action === "add" ? {message: "Something went wrong adding the patient", variant: "danger"} : {message: "Something went wrong editing the patient", variant: "danger"});
+      console.error("Error editing/adding the patient:", error);
+      setShowToast(true);
     }
-    setShowToast(true);
-    navigate(-1);
   };
 
   const handleOnAdd = (newTreatments: PatientTreatment[]) => setFormData((prevState) => ({ ...prevState, treatments: newTreatments }));

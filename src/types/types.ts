@@ -78,3 +78,8 @@ export interface Session {
 
 export type SessionWithPatient = Session & { patient: Patient };
 export type NewSession = Omit<Session, "id">;
+
+export interface ToastInfo {
+  variant: string;
+  message: string;
+}
