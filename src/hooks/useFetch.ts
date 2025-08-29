@@ -23,7 +23,6 @@ export const useFetch = <T>(method: string, url: string, transformationFn: ((dat
     try {
       const response = await axios({ method, url, data });
       const transformedData = transformationFn ? transformationFn(response.data) : response.data;
-      console.log(response);
 
       setState({
         status: response.status,

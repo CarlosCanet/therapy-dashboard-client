@@ -21,12 +21,10 @@ type SessionInfoFormProps = { action: "add", onSubmit: (session: NewSession) => 
 function SessionInfoForm(props: SessionInfoFormProps) {
   const session = props.action === "edit" ? props.session : undefined;
   const { action, onSubmit } = props;
-  const [formData, setFormData] = useState<FormDataInterface>({ date: dateToString(session?.date), description: session?.description ?? "", problems: session?.problems ?? "" });
+  const [formData, setFormData] = useState<FormDataInterface>({ date: dateToString(session?.date ?? new Date()), description: session?.description ?? "", problems: session?.problems ?? "" });
   const navigate = useNavigate();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setFormData(prevState => {
-    // console.log(event.target.value);
-    // console.log({ ...prevState, [event.target.name]: (event.target.type === "date" ? new Date(event.target.value) : event.target.value) })
     return ({ ...prevState, [event.target.name]: (event.target.type === "date" ? dateToString(new Date(event.target.value)) : event.target.value) });
   })
   
@@ -37,32 +35,33 @@ function SessionInfoForm(props: SessionInfoFormProps) {
         patientId: props.patientId,
         description: formData.description,
         date: new Date(formData.date),
-        problems: formData.problems
+        problems: formData.problems,
+        activitiesReviewed: [],
+        activitiesProposed: []
       };
       onSubmit(newSession);
-      console.log("Submiteado add")
     } else if (action === "edit" && session) {
-      const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id };
+      const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id, activitiesReviewed: [], activitiesProposed: [] };
       onSubmit(submittedSession);
-      console.log("Submiteado edit")
     }
+    navigate(-1);
   }
   
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Description</Form.Label>
-        <Form.Control type="text" name="description"  placeholder="" value={formData.description} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="text" as="textarea" name="description"  placeholder="" value={formData.description} onChange={handleOnChange} />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Date</Form.Label>
-        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange} required />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Problems</Form.Label>
-        <Form.Control type="text" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange}></Form.Control>
+        <Form.Control type="text" as="textarea" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange} />
       </Form.Group>
-      <Form.Group>
+      <Form.Group className="d-flex justify-content-center gap-4">
         <Button variant="secondary" type="submit">{action === "add" ? "New session" : "Edit session"}</Button>
         <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
       </Form.Group>

@@ -32,12 +32,8 @@ function NewTreatmentPage() {
   const getData = async () => {
     const ampersandNeeded = formData.treatmentName && formData.needPrescription;
     const nombreQuery = formData.treatmentName ? `nombre=${formData.treatmentName}` : "";
-    console.log("Test", formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "");
     const recetaQuery = formData.needPrescription !== "" ? `receta=${formData.needPrescription}` : "";
     const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
-    console.log("Query", query);
-    // const query = `${nombreQuery}${ampersandNeeded ? "&" : ""}${recetaQuery}`;
-    console.log(query)
     try {
       const response = await axios.get(`${import.meta.env.VITE_MEDS_API_URL}/medicamentos?${query}`);
       const responsePatient = await axios.get(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
@@ -50,7 +46,6 @@ function NewTreatmentPage() {
   }
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    console.log(event.target.value)
     setFormData(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }))
   }
 
@@ -68,8 +63,7 @@ function NewTreatmentPage() {
 
   const handleOnAdd = async () => {
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, { treatments: selectedTreatments });
-      console.log(response);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, { treatments: selectedTreatments });
       navigate(-1);
     } catch (error) {
       console.log(error); //! Do something
@@ -85,7 +79,7 @@ function NewTreatmentPage() {
           <Form.Group as={Row} className="d-flex justify-content-between align-items-center">
             <Col xs={6}>
             <FloatingLabel label="Treatment name">
-              <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange}></Form.Control>
+              <Form.Control name="treatmentName" type="text" value={formData.treatmentName} onChange={handleOnChange} />
             </FloatingLabel>
             </Col>
             <Col xs={6}>

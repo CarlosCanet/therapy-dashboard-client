@@ -1,18 +1,18 @@
-import { useParams } from "react-router"
-import type { NewSession, Session } from "../../types/types";
+import { Link, useParams } from "react-router"
+import type { Session, SessionWithPatient } from "../../types/types";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
-import { dateToString } from "../../utils/date";
-import { transformDataFetchWithDate } from "../../utils/api";
+import { transformSessionWithPatient } from "../../utils/api";
 import axios from "axios";
+import { dateToDisplay } from "../../utils/date";
 
 function SessionInfoPage() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<SessionWithPatient | null>(null);
   const { sessionId } = useParams();
-  const sessionApiResponse: APIResponse<Session> = useFetch<Session>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformDataFetchWithDate);
+  const sessionApiResponse: APIResponse<SessionWithPatient> = useFetch<SessionWithPatient>("get", `${import.meta.env.VITE_API_URL}/sessions/${sessionId}?_expand=patient`, transformSessionWithPatient);
   useEffect(() => {
      if (!sessionApiResponse.loading && sessionApiResponse.data && !Array.isArray(sessionApiResponse.data)) {
        setSession(sessionApiResponse.data);
@@ -26,11 +26,9 @@ function SessionInfoPage() {
     return <ErrorCard />
   }
 
-  const onEdit = async (session: Session | NewSession) => {
-    console.log(session);
+  const onEdit = async (session: Session) => {
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);
-      console.log(response)
+      await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);
     } catch (error) {
       console.log(error); //! It should display something
     }
@@ -38,7 +36,9 @@ function SessionInfoPage() {
 
   return (
     <div>
-      <h1>{session.patient && `${session.patient.name} - `} {dateToString(session.date)}</h1>
+      <Link to={`/patients/${session.patientId}`} className="link-primary link-underline-opacity-0">
+        <h1>{session.patient && `${session.patient.name} - `} {dateToDisplay(session.date)}</h1>
+      </Link>
       <SessionInfoForm action="edit" onSubmit={onEdit} session={session}/>
     </div>
   )

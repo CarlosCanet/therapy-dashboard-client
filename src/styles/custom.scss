@@ -32,3 +32,17 @@ body {
   height: clamp(3rem, 15vw, 20rem);
   font-size: clamp(1rem, 5vw, 4.5rem) !important;
 }
+
+.plus-icon {
+  opacity: 0.25; // estado normal
+  transition: opacity 1s ease; // para animación suave
+
+  &:hover {
+    opacity: 0.75;
+    cursor: pointer; // opcional
+  }
+}
+
+.hidden{
+  visibility: hidden;
+}

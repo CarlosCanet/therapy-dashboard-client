@@ -28,10 +28,7 @@ function PatientsListPage() {
     event.preventDefault();
     event.stopPropagation();
     try {
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
-      console.log(response);
-      // const index = patients.findIndex((patient) => patient.id === patientId);
-      // setPatients(patients.toSpliced(index, 1));
+      await axios.delete(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
     } catch (error) {
       console.log(error); //! Show something
     }
@@ -42,7 +39,7 @@ function PatientsListPage() {
       {
         patientsApiResponse.loading ? <Loading /> :
           <>
-            <h1>Patient List</h1>
+            <h1 className="text-primary">Patient List</h1>
             <FloatingLabel label="Patient name" className="my-3" controlId="patientNameFilter">
               <Form.Control type="text" placeholder="Search patient" value={filterPatientName} onChange={handleOnChange} />
             </FloatingLabel>

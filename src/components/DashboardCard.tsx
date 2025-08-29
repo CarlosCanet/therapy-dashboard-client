@@ -4,6 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import type { Patient, Session } from "../types/types";
 import Loading from "./Loading";
 import { Link } from "react-router";
+import { dateToDisplay } from "../utils/date";
 
 
 type DashboardCardProps = {title: "Sessions", elements: Session[] } | {title: "Patients", elements: Patient[] }
@@ -25,7 +26,7 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
             </div>
           </Link>
           <ListGroup>
-            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} as={Link} to={`/${title.toLowerCase()}/${element.id}`}>{"date" in element ? element.date.toLocaleDateString() : element.name}</ListGroup.Item>)}
+            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} as={Link} to={`/${title.toLowerCase()}/${element.id}`}>{"date" in element ? dateToDisplay(element.date) : element.name}</ListGroup.Item>)}
             
           </ListGroup>
         </Card.Body>
