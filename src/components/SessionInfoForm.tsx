@@ -1,9 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { type NewSession, type Session } from "../types/types";
+import { type NewSession, type Session, type ToastInfo } from "../types/types";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { dateToString } from "../utils/date";
+import ToastMessage from "./ToastMessage";
 
 interface FormDataInterface {
   date: string,
@@ -22,29 +23,37 @@ function SessionInfoForm(props: SessionInfoFormProps) {
   const session = props.action === "edit" ? props.session : undefined;
   const { action, onSubmit } = props;
   const [formData, setFormData] = useState<FormDataInterface>({ date: dateToString(session?.date ?? new Date()), description: session?.description ?? "", problems: session?.problems ?? "" });
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastInfo, setToastInfo] = useState<ToastInfo>({variant:"", message: ""});
   const navigate = useNavigate();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setFormData(prevState => {
     return ({ ...prevState, [event.target.name]: (event.target.type === "date" ? dateToString(new Date(event.target.value)) : event.target.value) });
   })
   
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (action === "add" && props.patientId) {
-      const newSession: NewSession = {
-        patientId: props.patientId,
-        description: formData.description,
-        date: new Date(formData.date),
-        problems: formData.problems,
-        activitiesReviewed: [],
-        activitiesProposed: []
-      };
-      onSubmit(newSession);
-    } else if (action === "edit" && session) {
-      const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id, activitiesReviewed: [], activitiesProposed: [] };
-      onSubmit(submittedSession);
+  const handleSubmit = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
+      if (action === "add" && props.patientId) {
+        const newSession: NewSession = {
+          patientId: props.patientId,
+          description: formData.description,
+          date: new Date(formData.date),
+          problems: formData.problems,
+          activitiesReviewed: [],
+          activitiesProposed: []
+        };
+        await onSubmit(newSession);
+      } else if (action === "edit" && session) {
+        const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id, activitiesReviewed: [], activitiesProposed: [] };
+        await onSubmit(submittedSession);
+      }
+      navigate(-1);
+    } catch (error) {
+      console.error("Error editing/adding the session:", error);
+      setToastInfo(action === "add" ? {message: "Something went wrong adding the session", variant: "danger"} : {message: "Something went wrong editing the session", variant: "danger"});
+      setShowToast(true);
     }
-    navigate(-1);
   }
   
   return (
@@ -65,6 +74,7 @@ function SessionInfoForm(props: SessionInfoFormProps) {
         <Button variant="secondary" type="submit">{action === "add" ? "New session" : "Edit session"}</Button>
         <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
       </Form.Group>
+      <ToastMessage variant={toastInfo.variant} message={toastInfo.message} delay={5000} show={showToast} setShow={setShowToast}/>
     </Form>
   )
 }

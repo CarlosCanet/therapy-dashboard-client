@@ -9,10 +9,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useFetch, type APIResponse } from "../../hooks/useFetch";
 import Loading from "../../components/Loading";
+import ToastMessage from "../../components/ToastMessage";
 
 function PatientsListPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [filterPatientName, setFilterPatientName] = useState<string>("");
+  const [showToast, setShowToast] = useState<boolean>(false);
   const patientsApiResponse: APIResponse<Patient> = useFetch<Patient>("get", `${import.meta.env.VITE_API_URL}/patients`);
   useEffect(() => {
     if (!patientsApiResponse.loading && patientsApiResponse.data && Array.isArray(patientsApiResponse.data)) {
@@ -30,7 +32,8 @@ function PatientsListPage() {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/patients/${patientId}`);
     } catch (error) {
-      console.log(error); //! Show something
+      console.error("Error removing the patient:", error);
+      setShowToast(true);
     }
   }
   
@@ -47,11 +50,12 @@ function PatientsListPage() {
               {patients
                 .filter(eachPatient => eachPatient.name.includes(filterPatientName))
                 .map((patient) => (
-                  (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center">
+                  (<ListGroup.Item action as={Link} to={`/patients/${patient.id}`} key={patient.id} className="d-flex justify-content-between align-items-center" variant="primary">
                   {patient.name}
                   <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, patient.id)}><Trash color="white" /></Button>
                 </ListGroup.Item>)
-              ))}
+                ))}
+              <ToastMessage variant="danger" message="Something went wrong deleting the patient" delay={5000} show={showToast} setShow={setShowToast}/>
             </ListGroup>
           </>
       }

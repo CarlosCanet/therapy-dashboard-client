@@ -32,7 +32,8 @@ function PatientInfoPage() {
     try {
       await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, {...patient, dob: dateToString(patient.dob)});
     } catch (error) {
-      console.log(error); //! It should display something
+      console.error("Error editing the patient:", error);
+      throw new Error("API not responding");
     }
   }
   

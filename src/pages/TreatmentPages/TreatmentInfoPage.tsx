@@ -6,6 +6,7 @@ import Loading from "../../components/Loading";
 import Card from "react-bootstrap/Card";
 import { Circle, PatchCheckFill } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
+import ToastMessage from "../../components/ToastMessage";
 
 function TreatmentInfoPage() {
   const [treatmentInfo, setTreatmentInfo] = useState<TreatmentInfo>({
@@ -24,9 +25,11 @@ function TreatmentInfoPage() {
     dosage: ""
   });
   const [loading, setLoading] = useState(true);
+  const [showToast, setShowToast] = useState<boolean>(false);
   const { treatmentId } = useParams();
   useEffect(() => {
     getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const navigate = useNavigate();
   
@@ -52,7 +55,8 @@ function TreatmentInfoPage() {
       });
       setLoading(false);
     } catch (error) {
-      console.log(error); //! Do something!
+      console.error("Error getting meds info from API:", error);
+      setShowToast(true);
     }
   };
 
@@ -85,6 +89,7 @@ function TreatmentInfoPage() {
         </Card.Body>
       </Card>
       <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
+      <ToastMessage variant="danger" message="Something went getting the info" delay={5000} show={showToast} setShow={setShowToast}/>
     </div>
   );
 }

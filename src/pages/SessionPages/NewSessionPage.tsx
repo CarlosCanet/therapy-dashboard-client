@@ -7,11 +7,13 @@ import { dateToString } from "../../utils/date";
 
 function NewSessionPage() {
   const { patientId } = useParams();
+
   const onAdd = async (session: NewSession) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/sessions/`, {...session, date: dateToString(session.date)});
     } catch (error) {
-      console.log(error); //! It should display something
+      console.error("Error creating the session:", error);
+      throw new Error("API not responding");
     }
   }
 
@@ -23,4 +25,4 @@ function NewSessionPage() {
     <SessionInfoForm action="add" onSubmit={onAdd} patientId={patientId} />
   )
 }
-export default NewSessionPage
+export default NewSessionPage;

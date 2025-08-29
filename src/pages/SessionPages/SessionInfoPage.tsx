@@ -7,7 +7,7 @@ import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
 import { transformSessionWithPatient } from "../../utils/api";
 import axios from "axios";
-import { dateToDisplay } from "../../utils/date";
+import { dateToDisplay, dateToString } from "../../utils/date";
 
 function SessionInfoPage() {
   const [session, setSession] = useState<SessionWithPatient | null>(null);
@@ -28,9 +28,10 @@ function SessionInfoPage() {
 
   const onEdit = async (session: Session) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, {...session, date: dateToString(session.date)});
     } catch (error) {
-      console.log(error); //! It should display something
+      console.error("Error editing the session:", error);
+      throw new Error("API not responding");
     }
   }
 

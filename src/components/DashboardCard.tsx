@@ -13,7 +13,7 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
   const isSession = title === "Sessions";
   return (
     <div className="d-flex flex-column justify-content-center align-align-items-stretch my-5">
-      <Card>
+      <Card className={`bg-light ${isSession ? "border-danger" : "border-primary"}`}>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Link to={`/${title.toLowerCase()}`} className="link-danger link-underline-opacity-0">
@@ -26,7 +26,7 @@ function DashboardCard({ title, elements }: DashboardCardProps) {
             </div>
           </Link>
           <ListGroup>
-            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} as={Link} to={`/${title.toLowerCase()}/${element.id}`}>{"date" in element ? dateToDisplay(element.date) : element.name}</ListGroup.Item>)}
+            {elements === null ? <Loading /> : elements.map(element => <ListGroup.Item action key={element.id} as={Link} to={`/${title.toLowerCase()}/${element.id}`} variant={isSession ? "danger" : "primary"}>{"date" in element ? dateToDisplay(element.date) : element.name}</ListGroup.Item>)}
             
           </ListGroup>
         </Card.Body>

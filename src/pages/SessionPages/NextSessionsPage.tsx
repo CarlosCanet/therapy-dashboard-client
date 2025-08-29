@@ -83,9 +83,9 @@ function NextSessionsPage() {
                       {week.map((day, dayIndex) => (
                         <td key={dayIndex}>
                           {"date" in day && day.date &&
-                            <Card className={day.numSessions > 0 ? "border-primary border-2" : ""}>
-                              <Card.Header className="bg-primary bg-opacity-75">{day.value}</Card.Header>
-                              <Card.Body className="py-1 bg-primary bg-opacity-25">
+                            <Card className={day.numSessions > 0 ? "border-info border-2" : ""}>
+                              <Card.Header className="bg-info bg-opacity-75">{day.value}</Card.Header>
+                              <Card.Body className="py-1 bg-info bg-opacity-25">
                                 <Card.Text>{day.numSessions}</Card.Text>
                               </Card.Body>
                             </Card>
