@@ -48,16 +48,6 @@ function NextSessionsPage() {
       <Row>
         <Col>
           <Card>
-            <Card.Header as={"h2"} className="text-primary py-3">Next sessions</Card.Header>
-            <Card.Body>
-              {sessionsFiltered.length === 0 ? <Card.Title>No sessions</Card.Title> : <SessionList sessions={sessionsFiltered}/>}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
             <Card.Header as={"h2"} className="text-primary py-3 d-flex justify-content-between align-items-center">
               <CaretLeft onClick={() => setMyDate(prevDate => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1, 1))} />
               <Container onClick={() => setMyDate(new Date())}>Calendar</Container>
@@ -96,6 +86,16 @@ function NextSessionsPage() {
                   ))}
                 </tbody>
               </Table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Card>
+            <Card.Header as={"h2"} className="text-primary py-3">Next sessions</Card.Header>
+            <Card.Body>
+              {sessionsFiltered.length === 0 ? <Card.Title>No sessions</Card.Title> : <SessionList sessions={sessionsFiltered}/>}
             </Card.Body>
           </Card>
         </Col>
