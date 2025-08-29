@@ -25,8 +25,6 @@ function SessionInfoForm(props: SessionInfoFormProps) {
   const navigate = useNavigate();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setFormData(prevState => {
-    // console.log(event.target.value);
-    // console.log({ ...prevState, [event.target.name]: (event.target.type === "date" ? new Date(event.target.value) : event.target.value) })
     return ({ ...prevState, [event.target.name]: (event.target.type === "date" ? dateToString(new Date(event.target.value)) : event.target.value) });
   })
   
@@ -42,11 +40,9 @@ function SessionInfoForm(props: SessionInfoFormProps) {
         activitiesProposed: []
       };
       onSubmit(newSession);
-      console.log("Submiteado add")
     } else if (action === "edit" && session) {
       const submittedSession = {...formData, date: new Date(formData.date), patientId: session.patientId, id: session.id, activitiesReviewed: [], activitiesProposed: [] };
       onSubmit(submittedSession);
-      console.log("Submiteado edit")
     }
     navigate(-1);
   }
@@ -59,7 +55,7 @@ function SessionInfoForm(props: SessionInfoFormProps) {
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Date</Form.Label>
-        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange} />
+        <Form.Control type="date" name="date" placeholder="" value={formData.date} onChange={handleOnChange} required />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Problems</Form.Label>

@@ -45,7 +45,6 @@ export function transformPatientWithSessions(data: any): PatientWithSessions | P
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function transformSession(data: any): Session | Session[]{
-  console.log("T", data)
   if (Array.isArray(data)) {
     return data.map(element => {
       return transformOneSession(element);
@@ -56,7 +55,6 @@ export function transformSession(data: any): Session | Session[]{
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function transformSessionWithPatient(data: any): SessionWithPatient | SessionWithPatient[] {
-  console.log("T", data)
   if (Array.isArray(data)) {
     return data.map(element => {
       return transformOneSessionWithPatient(element);

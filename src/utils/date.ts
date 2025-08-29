@@ -12,3 +12,12 @@ export function dateToString(date?: Date | undefined | null | string): string {
   }
   return date.toISOString().slice(0, 10);
 }
+
+/**
+ *  Transform a date to displayable string
+ * @param date `date` Date to be converted
+ * @returns The displayable date string.
+ */
+export function dateToDisplay(date: Date){
+  return date.toLocaleDateString("es-ES", { month: "2-digit", day: "2-digit", year: "numeric" })
+}

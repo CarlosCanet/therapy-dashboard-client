@@ -10,6 +10,7 @@ import SessionInfoPage from "./pages/SessionPages/SessionInfoPage";
 import NewSessionPage from "./pages/SessionPages/NewSessionPage";
 import TreatmentInfoPage from "./pages/TreatmentPages/TreatmentInfoPage";
 import NewTreatmentPage from "./pages/TreatmentPages/NewTreatmentPage";
+import NextSessionsPage from "./pages/SessionPages/NextSessionsPage";
 
 function App() {
   
@@ -27,6 +28,7 @@ function App() {
         <Route path="/sessions" element={<SessionListPage />}></Route>
         <Route path="/sessions/:sessionId" element={<SessionInfoPage />}></Route>
         <Route path="/patients/:patientId/new-session" element={<NewSessionPage />}></Route>
+        <Route path="/calendar" element={<NextSessionsPage />}></Route>
         
         <Route path="/treatment-info/:treatmentId" element={<TreatmentInfoPage />}></Route>
         <Route path="/patients/:patientId/new-treatment" element={<NewTreatmentPage />}></Route>

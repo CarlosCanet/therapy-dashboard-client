@@ -9,9 +9,7 @@ function NewSessionPage() {
   const { patientId } = useParams();
   const onAdd = async (session: NewSession) => {
     try {
-      console.log("New session:", session);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/sessions/`, {...session, date: dateToString(session.date)});
-      console.log("Post response:", response);
+      await axios.post(`${import.meta.env.VITE_API_URL}/sessions/`, {...session, date: dateToString(session.date)});
     } catch (error) {
       console.log(error); //! It should display something
     }

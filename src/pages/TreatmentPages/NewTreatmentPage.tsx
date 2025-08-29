@@ -46,7 +46,6 @@ function NewTreatmentPage() {
   }
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    console.log(event.target.value)
     setFormData(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }))
   }
 
@@ -64,8 +63,7 @@ function NewTreatmentPage() {
 
   const handleOnAdd = async () => {
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, { treatments: selectedTreatments });
-      console.log(response);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/patients/${patientId}`, { treatments: selectedTreatments });
       navigate(-1);
     } catch (error) {
       console.log(error); //! Do something

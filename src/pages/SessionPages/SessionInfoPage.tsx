@@ -7,6 +7,7 @@ import ErrorCard from "../../components/ErrorCard";
 import SessionInfoForm from "../../components/SessionInfoForm";
 import { transformSessionWithPatient } from "../../utils/api";
 import axios from "axios";
+import { dateToDisplay } from "../../utils/date";
 
 function SessionInfoPage() {
   const [session, setSession] = useState<SessionWithPatient | null>(null);
@@ -26,10 +27,8 @@ function SessionInfoPage() {
   }
 
   const onEdit = async (session: Session) => {
-    console.log(session);
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);
-      console.log(response)
+      await axios.patch(`${import.meta.env.VITE_API_URL}/sessions/${sessionId}`, session);
     } catch (error) {
       console.log(error); //! It should display something
     }
@@ -38,7 +37,7 @@ function SessionInfoPage() {
   return (
     <div>
       <Link to={`/patients/${session.patientId}`} className="link-primary link-underline-opacity-0">
-        <h1>{session.patient && `${session.patient.name} - `} {session.date.toLocaleDateString("es-ES", { month: "2-digit", day: "2-digit", year: "numeric" })}</h1>
+        <h1>{session.patient && `${session.patient.name} - `} {dateToDisplay(session.date)}</h1>
       </Link>
       <SessionInfoForm action="edit" onSubmit={onEdit} session={session}/>
     </div>

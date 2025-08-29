@@ -35,8 +35,6 @@ function TreatmentInfoPage() {
     try {
       const response = await axios.get(`${import.meta.env.VITE_MEDS_API_URL}/medicamento?nregistro=${treatmentId}`);
       const treatment: RemoteAPITreatment = response.data;
-      console.log("T", treatment)
-      console.log(response);
       setTreatmentInfo({
         id: treatment.nregistro,
         name: treatment.nombre,
