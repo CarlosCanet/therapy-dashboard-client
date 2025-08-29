@@ -4,6 +4,7 @@ import type { Patient, Session } from "../types/types"
 import { useFetch, type APIResponse } from "../hooks/useFetch";
 import Loading from "../components/Loading";
 import { transformSession } from "../utils/api";
+import { Col, Row } from "react-bootstrap";
 
 function DashboardPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -23,10 +24,14 @@ function DashboardPage() {
   return (
     <div>
       {patientsApiResponse.loading || sessionsApiResponse.loading ? <Loading /> : 
-        <>
-          <DashboardCard title="Patients" elements={patients} />
-          <DashboardCard title="Sessions" elements={sessions} />
-        </>
+        <Row>
+          <Col md={6}>
+            <DashboardCard title="Patients" elements={patients} />
+          </Col>
+          <Col md={6}>
+            <DashboardCard title="Sessions" elements={sessions} />
+          </Col>
+        </Row>
       }
     </div>
   )

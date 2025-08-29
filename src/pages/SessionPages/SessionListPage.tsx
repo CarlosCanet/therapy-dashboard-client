@@ -81,7 +81,7 @@ function SessionListPage() {
 
   return (
     <div>
-      <h1>Session List</h1>
+      <h1 className="text-primary">Session List</h1>
       <Form.Group>
         <FloatingLabel label="Patient name" className="my-3" controlId="patientNameFilter">
           <Form.Select value={selectedPatient?.id} onChange={handleOnChangeSelect}>
@@ -90,12 +90,16 @@ function SessionListPage() {
           </Form.Select>
         </FloatingLabel>
         <Row>
-          <FloatingLabel as={Col} label="Date from" className="my-3" controlId="dateFromFilter">
-            <Form.Control size="sm" name="dateFrom" type="date" placeholder="DD/MM/YYYY" onChange={handleOnChangeDate}/>
-          </FloatingLabel>
-          <FloatingLabel as={Col} label="Date to" className="my-3" controlId="dateToFilter">
-            <Form.Control size="sm" name="dateTo" type="date" onChange={handleOnChangeDate}/>
-          </FloatingLabel>
+          <Col>
+            <FloatingLabel label="Date from" className="my-3" controlId="dateFromFilter">
+              <Form.Control size="sm" name="dateFrom" type="date" onChange={handleOnChangeDate}/>
+            </FloatingLabel>
+          </Col>
+          <Col>
+            <FloatingLabel label="Date to" className="my-3" controlId="dateToFilter">
+              <Form.Control size="sm" name="dateTo" type="date" onChange={handleOnChangeDate}/>
+            </FloatingLabel>
+          </Col>
         </Row>
         <Row className="align-items-center">
           <Col>

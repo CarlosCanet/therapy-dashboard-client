@@ -8,6 +8,7 @@ import { Badge, Card } from "react-bootstrap";
 import NewTreatmentModal from "./NewTreatmentModal";
 import { dateToString } from "../utils/date";
 import { DashCircle } from "react-bootstrap-icons";
+import ToastMessage from "./ToastMessage";
 
 interface FormDataInterface {
   name: string;
@@ -16,6 +17,11 @@ interface FormDataInterface {
   issues: string[];
   treatments: { id: string; name: string }[];
   [key: string]: string | Date | string[] | Gender | { id: string; name: string }[];
+}
+
+interface ToastInfo {
+  variant: string;
+  message: string;
 }
 
 type PatientInfoFormProps = { action: "add"; onSubmit: (patient: NewPatient) => Promise<void> } | { action: "edit"; onSubmit: (patient: Patient) => Promise<void>; patient: Patient };
@@ -35,6 +41,8 @@ function PatientInfoForm(props: PatientInfoFormProps) {
     treatments: patient?.treatments ?? [],
   });
   const [showAddTreatmentModal, setShowAddTreatmentModal] = useState(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastInfo, setToastInfo] = useState<ToastInfo>({variant:"", message: ""});
   const navigate = useNavigate();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
@@ -64,12 +72,13 @@ function PatientInfoForm(props: PatientInfoFormProps) {
         treatments: [],
       };
       onSubmit(newPatient);
-      console.log("Submiteado add");
+      setToastInfo({message: "Patient added", variant: "primary"});
     } else if (action === "edit" && patient) {
       const submittedPatient: Patient = { ...formData, dob: new Date(formData.dob), id: patient.id, activitiesPending: patient.activitiesPending ?? [], activitiesDone: patient.activitiesDone ?? [], treatments: formData.treatments ?? [], issues: filterEmptyIssues(formData.issues) };
       onSubmit(submittedPatient);
-      console.log("Submiteado edit");
+      setToastInfo({message: "Patient edited", variant: "secondary"});
     }
+    setShowToast(true);
     navigate(-1);
   };
 
@@ -91,15 +100,15 @@ function PatientInfoForm(props: PatientInfoFormProps) {
   }
 
   return (
-    <Card className="mt-3">
+    <Card className="mt-3 bg-light" border="secondary">
       <Card.Body>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="my-3" controlId="">
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" name="name" placeholder="" value={formData.name} onChange={handleOnChange} />
+            <Form.Control type="text" name="name" placeholder="" value={formData.name} onChange={handleOnChange} required />
           </Form.Group>
-          <Form.Group className="my-3" controlId="">
-            <Form.Label>Date of birth</Form.Label>
+          <Form.Group className="my-3 " controlId="">
+            <Form.Label className="d-flex align-items-center justify-content-center gap-2">Date of birth {formData.dob && <Badge pill bg="secondary" text="dark" className="px-3">{(new Date().getFullYear())- (new Date(formData.dob).getFullYear())} años</Badge>}</Form.Label>
             <Form.Control type="date" name="dob" placeholder="" value={formData.dob} onChange={handleOnChange} />
           </Form.Group>
           <Form.Group className="my-3" controlId="">
@@ -118,8 +127,8 @@ function PatientInfoForm(props: PatientInfoFormProps) {
             <Form.Label>Issues</Form.Label>
             {formData.issues.map((_issue, index) => {
               return (
-                <Form.Group className="d-flex align-items-center gap-2">
-                    <Form.Control key={`issue${index}`} type="type" placeholder="" name={`issues[${index}]`} value={formData.issues[index]} onChange={(event) => handleOnChangeIssues(event, index)} />
+                <Form.Group className="d-flex align-items-center gap-2" key={`issue${index}`}>
+                    <Form.Control type="type" placeholder="" name={`issues[${index}]`} value={formData.issues[index]} onChange={(event) => handleOnChangeIssues(event, index)} />
                     <DashCircle className={`plus-icon ${(index === (formData.issues.length - 1)) ? "hidden" : ""}`} onClick={() => handleDeleteIssue(index)} />
                   </Form.Group>
                 );
@@ -148,9 +157,10 @@ function PatientInfoForm(props: PatientInfoFormProps) {
               Back
             </Button>
           </Form.Group>
-          </Form>
-        </Card.Body>
-      </Card>
+        </Form>
+        <ToastMessage variant={toastInfo.variant} message={toastInfo.message} delay={5000} show={showToast} setShow={setShowToast}/>
+      </Card.Body>
+    </Card>
   );
 }
 export default PatientInfoForm;

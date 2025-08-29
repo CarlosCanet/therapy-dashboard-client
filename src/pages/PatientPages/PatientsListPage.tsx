@@ -42,7 +42,7 @@ function PatientsListPage() {
       {
         patientsApiResponse.loading ? <Loading /> :
           <>
-            <h1>Patient List</h1>
+            <h1 className="text-primary">Patient List</h1>
             <FloatingLabel label="Patient name" className="my-3" controlId="patientNameFilter">
               <Form.Control type="text" placeholder="Search patient" value={filterPatientName} onChange={handleOnChange} />
             </FloatingLabel>

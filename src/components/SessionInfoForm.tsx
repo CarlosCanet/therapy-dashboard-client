@@ -55,7 +55,7 @@ function SessionInfoForm(props: SessionInfoFormProps) {
     <Form onSubmit={handleSubmit}>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Description</Form.Label>
-        <Form.Control type="text" name="description"  placeholder="" value={formData.description} onChange={handleOnChange} />
+        <Form.Control type="text" as="textarea" name="description"  placeholder="" value={formData.description} onChange={handleOnChange} />
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Date</Form.Label>
@@ -63,9 +63,9 @@ function SessionInfoForm(props: SessionInfoFormProps) {
       </Form.Group>
       <Form.Group className="my-3" controlId="">
         <Form.Label>Problems</Form.Label>
-        <Form.Control type="text" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange} />
+        <Form.Control type="text" as="textarea" name="problems" placeholder="" value={formData.problems} onChange={handleOnChange} />
       </Form.Group>
-      <Form.Group>
+      <Form.Group className="d-flex justify-content-center gap-4">
         <Button variant="secondary" type="submit">{action === "add" ? "New session" : "Edit session"}</Button>
         <Button variant="danger" onClick={() => navigate(-1)}>Back</Button>
       </Form.Group>

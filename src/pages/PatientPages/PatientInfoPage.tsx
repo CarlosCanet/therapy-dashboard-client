@@ -38,12 +38,12 @@ function PatientInfoPage() {
   
   return (
     <div>
-      <h1>{patient.name}</h1>
+      <h1 className="text-primary">{patient.name}</h1>
       <PatientInfoForm patient={patient} action="edit" onSubmit={onEdit} />
-      <h2 className="my-4">Sessions</h2>
+      <h2 className="mt-4 text-primary">Sessions</h2>
       
       <Link to={`/patients/${patient.id}/new-session`}>
-        <Badge className="my-1">Add new Session</Badge>
+        <Badge className="mb-3">Add new Session</Badge>
       </Link>
       
       <SessionList sessions={patient.sessions ?? []}/>

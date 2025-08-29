@@ -13,7 +13,7 @@ function NavbarDashboard() {
       <Container>
         <Navbar.Brand as={Link} to="/"><img src={LogoTD} className="align-top" width="30px"/></Navbar.Brand>
         <Navbar.Brand as={Link} to="/" className='text-secondary'>Therapy Dashboard</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(true)}/>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded((prevState) => !prevState)}/>
         <Navbar.Collapse id="basic-navbar-nav ">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/" className='text-secondary' onClick={()=>setExpanded(false)}>Home</Nav.Link>

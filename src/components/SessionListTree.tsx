@@ -21,7 +21,7 @@ function SessionListTree({ sessions }: SessionListTreeProps) {
   }
   
   return (
-    <Accordion>
+    <Accordion alwaysOpen>
       {patients
         .map(([patientId, patientName]) => (
         <Accordion.Item key={patientId} eventKey={patientId}>
@@ -31,7 +31,7 @@ function SessionListTree({ sessions }: SessionListTreeProps) {
               {sessions
                 .filter(session => session.patientId === patientId)
                 .map(session => (
-                  <ListGroup.Item as={Link} to={`/sessions/${session.id}`} key={session.id} className="d-flex justify-content-center align-items-center">
+                  <ListGroup.Item as={Link} to={`/sessions/${session.id}`} key={session.id} className="d-flex justify-content-between align-items-center px-5">
                     {session.date.toLocaleDateString()}
                     <Button variant="danger" className="d-flex justify-content-between align-items-center" onClick={(event) => handleDelete(event, session.id)}><Trash color="white" /></Button>
                   </ListGroup.Item>
